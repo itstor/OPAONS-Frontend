@@ -7,10 +7,10 @@ export default function SocialMediaLogo({ logo, title, link }: { logo: IconDefin
       href={link}
       target='_blank'
       rel='noopener noreferrer'
-      className='text-black no-underline visited:text-black target:text-black hover:underline'
+      className='text-primary-800 no-underline visited:text-primary-800 target:text-primary-800 hover:underline'
     >
       <div className='flex flex-row items-center gap-2'>
-        <div className='flex h-[26px] w-[26px] items-center justify-center rounded-full bg-black p-[2px]'>
+        <div className='flex h-[26px] w-[26px] items-center justify-center rounded-full bg-primary-800 p-[2px]'>
           <FontAwesomeIcon icon={logo} size='sm' color='#fff6e7' />
         </div>
         <caption className='text-center text-xs font-medium'>{title}</caption>
