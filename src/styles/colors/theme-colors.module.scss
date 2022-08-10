@@ -1,5 +1,6 @@
 // paper & background
-$paper: #fff6e7;
+$background: #fff6e7;
+$paper: #ffffff;
 
 // primary
 $primaryLight: #eceff1;
@@ -50,6 +51,7 @@ $grey900: #212121;
 
 :export {
   // paper & background
+  background: $background;
   paper: $paper;
 
   // primary
