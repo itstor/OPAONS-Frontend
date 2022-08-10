@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'corner-login': 'url("/images/background/corner-decor.svg")',
+        'corner-login': 'url("/images/background/corner-decor.png")',
       },
       colors: {
         'primary-100': '#FFF6E7',
