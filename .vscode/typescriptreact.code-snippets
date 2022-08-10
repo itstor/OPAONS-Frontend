@@ -16,11 +16,7 @@
   },
   "React.useReducer": {
     "prefix": "ur",
-    "body": [
-      "const [state, dispatch] = React.useReducer(${0:someReducer}, {",
-      "  ",
-      "})"
-    ]
+    "body": ["const [state, dispatch] = React.useReducer(${0:someReducer}, {", "  ", "})"]
   },
   "React.useRef": {
     "prefix": "urf",
@@ -61,20 +57,12 @@
   "Region": {
     "prefix": "reg",
     "scope": "javascript, typescript, javascriptreact, typescriptreact",
-    "body": [
-      "//#region  //*=========== ${1} ===========",
-      "${TM_SELECTED_TEXT}$0",
-      "//#endregion  //*======== ${1} ==========="
-    ]
+    "body": ["//#region  //*=========== ${1} ===========", "${TM_SELECTED_TEXT}$0", "//#endregion  //*======== ${1} ==========="]
   },
   "Region CSS": {
     "prefix": "regc",
     "scope": "css, scss",
-    "body": [
-      "/* #region  /**=========== ${1} =========== */",
-      "${TM_SELECTED_TEXT}$0",
-      "/* #endregion  /**======== ${1} =========== */"
-    ]
+    "body": ["/* #region  /**=========== ${1} =========== */", "${TM_SELECTED_TEXT}$0", "/* #endregion  /**======== ${1} =========== */"]
   },
   //#endregion  //*======== Commons ===========
 
@@ -116,13 +104,7 @@
   },
   "Get Static Props": {
     "prefix": "gsp",
-    "body": [
-      "export const getStaticProps = async (context: GetStaticPropsContext) => {",
-      "  return {",
-      "    props: {}",
-      "  };",
-      "}"
-    ]
+    "body": ["export const getStaticProps = async (context: GetStaticPropsContext) => {", "  return {", "    props: {}", "  };", "}"]
   },
   "Get Static Paths": {
     "prefix": "gspa",

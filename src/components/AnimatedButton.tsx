@@ -2,7 +2,6 @@
 import { motion, useCycle } from 'framer-motion';
 import { forwardRef, ReactElement } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const AnimatedButton = forwardRef(
   (
     {
@@ -16,6 +15,7 @@ const AnimatedButton = forwardRef(
       type?: 'rotate' | 'slide' | 'scale';
       direction?: 'up' | 'left' | 'right' | 'down';
       offset?: number;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       scale?: any;
     },
     ref: React.Ref<HTMLDivElement>

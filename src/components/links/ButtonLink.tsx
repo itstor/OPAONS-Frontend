@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import clsxm from '@/lib/clsxm';
 
-import UnstyledLink, {
-  UnstyledLinkProps,
-} from '@/components/links/UnstyledLink';
+import UnstyledLink, { UnstyledLinkProps } from '@/components/links/UnstyledLink';
 
 enum ButtonVariant {
   'primary',
@@ -20,10 +18,7 @@ type ButtonLinkProps = {
 } & UnstyledLinkProps;
 
 const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
-  (
-    { children, className, variant = 'primary', isDarkBg = false, ...rest },
-    ref
-  ) => {
+  ({ children, className, variant = 'primary', isDarkBg = false, ...rest }, ref) => {
     return (
       <UnstyledLink
         ref={ref}
@@ -46,20 +41,18 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
               'text-primary-500',
               'border border-primary-500',
               'hover:bg-primary-50 active:bg-primary-100 disabled:bg-primary-100',
-              isDarkBg &&
-                'hover:bg-gray-900 active:bg-gray-800 disabled:bg-gray-800',
+              isDarkBg && 'hover:bg-gray-900 active:bg-gray-800 disabled:bg-gray-800',
             ],
             variant === 'ghost' && [
               'text-primary-500',
               'shadow-none',
               'hover:bg-primary-50 active:bg-primary-100 disabled:bg-primary-100',
-              isDarkBg &&
-                'hover:bg-gray-900 active:bg-gray-800 disabled:bg-gray-800',
+              isDarkBg && 'hover:bg-gray-900 active:bg-gray-800 disabled:bg-gray-800',
             ],
             variant === 'light' && [
-              'bg-white text-dark ',
+              'text-dark bg-white ',
               'border border-gray-300',
-              'hover:bg-gray-100 hover:text-dark',
+              'hover:text-dark hover:bg-gray-100',
               'active:bg-white/80 disabled:bg-gray-200',
             ],
             variant === 'dark' && [
