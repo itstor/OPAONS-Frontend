@@ -131,7 +131,7 @@ export default function LoginForm() {
                     <FormHelperText error>{errors.submit}</FormHelperText>
                   </Box>
                 )}
-                <Grid item xs direction='column' width='100%' mt={1.5} mb={3} sx={{ justifyContent: 'end', display: 'flex' }}>
+                <Grid item xs width='100%' mt={1.5} mb={3} sx={{ justifyContent: 'end', display: 'flex', flexDirection: 'column' }}>
                   <AnimatedButton>
                     <Button
                       disableElevation
