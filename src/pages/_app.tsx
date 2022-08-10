@@ -1,16 +1,36 @@
+import { CacheProvider, EmotionCache } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { AppProps } from 'next/app';
+import Head from 'next/head';
+import * as React from 'react';
+import { Toaster } from 'react-hot-toast';
 
 import '@/styles/globals.css';
-// !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
-import '@/styles/colors.css';
 
-/**
- * !STARTERCONF info
- * ? `Layout` component is called in every page using `np` snippets. If you have consistent layout across all page, you can add it here too
- */
+import theme from '@/styles/themes';
+import createEmotionCache from '@/utils/createEmotionCache';
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
 }
 
-export default MyApp;
+export default function MyApp(props: MyAppProps) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  return (
+    <StyledEngineProvider injectFirst>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <meta name='viewport' content='initial-scale=1, width=device-width' />
+        </Head>
+        <ThemeProvider theme={theme()}>
+          <CssBaseline />
+          <Component {...pageProps} />
+          <Toaster />
+        </ThemeProvider>
+      </CacheProvider>
+    </StyledEngineProvider>
+  );
+}
