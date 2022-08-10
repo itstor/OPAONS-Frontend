@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import NextNProgress from 'nextjs-progressbar';
 import * as React from 'react';
 import { Toaster } from 'react-hot-toast';
 
@@ -27,6 +28,7 @@ export default function MyApp(props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme()}>
           <CssBaseline />
+          <NextNProgress color='#774514' />
           <Component {...pageProps} />
           <Toaster />
         </ThemeProvider>
