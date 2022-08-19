@@ -1,4 +1,5 @@
-import { PaletteOptions } from '@mui/material';
+import { PaletteOptions, SimplePaletteColorOptions } from '@mui/material';
+import { ColorPartial } from '@mui/material/styles/createPalette';
 
 import { IThemeOption } from '@/styles/themes';
 
@@ -15,7 +16,12 @@ declare module '@mui/material/styles/createPalette' {
   }
 }
 
-export default function themePalette(theme: IThemeOption): PaletteOptions {
+interface DefaultPaletteOptions extends PaletteOptions {
+  primary?: ColorPartial & SimplePaletteColorOptions;
+  secondary?: ColorPartial & SimplePaletteColorOptions;
+}
+
+export default function themePalette(theme: IThemeOption): DefaultPaletteOptions {
   return {
     common: {
       black: theme.colors?.darkPaper,
@@ -24,15 +30,29 @@ export default function themePalette(theme: IThemeOption): PaletteOptions {
       light: theme.colors?.primaryLight,
       main: theme.colors?.primaryMain,
       dark: theme.colors?.primaryDark,
+      100: theme.colors?.primary100,
       200: theme.colors?.primary200,
+      300: theme.colors?.primary300,
+      400: theme.colors?.primary400,
+      500: theme.colors?.primary500,
+      600: theme.colors?.primary600,
+      700: theme.colors?.primary700,
       800: theme.colors?.primary800,
+      900: theme.colors?.primary900,
     },
     secondary: {
       light: theme.colors?.secondaryLight,
       main: theme.colors?.secondaryMain,
       dark: theme.colors?.secondaryDark,
+      100: theme.colors?.secondary100,
       200: theme.colors?.secondary200,
+      300: theme.colors?.secondary300,
+      400: theme.colors?.secondary400,
+      500: theme.colors?.secondary500,
+      600: theme.colors?.secondary600,
+      700: theme.colors?.secondary700,
       800: theme.colors?.secondary800,
+      900: theme.colors?.secondary900,
     },
     error: {
       light: theme.colors?.errorLight,

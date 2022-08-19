@@ -20,8 +20,15 @@ $primary900: #774514;
 $secondaryLight: #f8e5c5;
 $secondaryMain: #f8c66d;
 $secondaryDark: #d5a050;
+$secondary100: #fefcf4;
 $secondary200: #fef8e9;
+$secondary300: #fcf3dd;
+$secondary400: #faedd4;
+$secondary500: #f8e5c5;
+$secondary600: #d5b890;
+$secondary700: #b28e63;
 $secondary800: #8f683e;
+$secondary900: #774c25;
 
 // success Colors
 $successLight: #edf7ed;
@@ -56,17 +63,31 @@ $grey900: #212121;
 
   // primary
   primaryLight: $primaryLight;
-  primary200: $primary200;
   primaryMain: $primaryMain;
   primaryDark: $primaryDark;
+  primary100: $primary100;
+  primary200: $primary200;
+  primary300: $primary300;
+  primary400: $primary400;
+  primary500: $primary500;
+  primary600: $primary600;
+  primary700: $primary700;
   primary800: $primary800;
+  primary900: $primary900;
 
   // secondary
   secondaryLight: $secondaryLight;
-  secondary200: $secondary200;
   secondaryMain: $secondaryMain;
   secondaryDark: $secondaryDark;
+  secondary100: $secondary100;
+  secondary200: $secondary200;
+  secondary300: $secondary300;
+  secondary400: $secondary400;
+  secondary500: $secondary500;
+  secondary600: $secondary600;
+  secondary700: $secondary700;
   secondary800: $secondary800;
+  secondary900: $secondary900;
 
   // success
   successLight: $successLight;

@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'corner-login': 'url("/images/background/corner-decor.png")',
+        'left-corner-decor': 'url("/images/background/left-corner-decor.png")',
       },
       colors: {
         'primary-100': '#FFF6E7',
@@ -16,6 +16,15 @@ module.exports = {
         'primary-700': '#B27C36',
         'primary-800': '#8F5D22',
         'primary-900': '#774514',
+        'secondary-100': '#FEFCF4',
+        'secondary-200': '#FEF8E9',
+        'secondary-300': '#FCF3DD',
+        'secondary-400': '#FAEDD4',
+        'secondary-500': '#F8E5C5',
+        'secondary-600': '#D5B890',
+        'secondary-700': '#B28E63',
+        'secondary-800': '#8F683E',
+        'secondary-900': '#774C25',
       },
     },
   },

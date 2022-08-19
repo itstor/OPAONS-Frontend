@@ -5,9 +5,13 @@ import { IThemeOption } from '@/styles/themes';
 declare module '@mui/material/styles/createTypography' {
   interface Typography {
     customInput?: CSSProperties;
+    menuCaption?: CSSProperties;
+    subMenuCaption?: CSSProperties;
   }
   interface TypographyOptions {
     customInput?: CSSProperties;
+    menuCaption?: CSSProperties;
+    subMenuCaption?: CSSProperties;
   }
 }
 
@@ -71,6 +75,20 @@ export default function themeTypography(theme: IThemeOption): TypographyOptions 
       color: theme.darkTextPrimary,
     },
     button: {
+      textTransform: 'capitalize',
+    },
+    menuCaption: {
+      fontSize: '0.875rem',
+      fontWeight: 500,
+      color: theme.heading,
+      padding: '6px',
+      textTransform: 'capitalize',
+      marginTop: '10px',
+    },
+    subMenuCaption: {
+      fontSize: '0.6875rem',
+      fontWeight: 500,
+      color: theme.darkTextSecondary,
       textTransform: 'capitalize',
     },
     customInput: {
