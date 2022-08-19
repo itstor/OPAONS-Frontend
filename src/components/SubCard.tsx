@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { forwardRef } from 'react';
+import { CSSProperties, forwardRef } from 'react';
 
 type SubCardProps = {
   children?: React.ReactNode;
@@ -8,9 +8,9 @@ type SubCardProps = {
   contentClass?: string;
   darkTitle?: boolean;
   secondary?: React.ReactNode;
-  sx?: object;
-  contentSX?: object;
-  title?: string;
+  sx?: CSSProperties;
+  contentSX?: CSSProperties;
+  title?: JSX.Element | string;
 };
 
 const SubCard = forwardRef(

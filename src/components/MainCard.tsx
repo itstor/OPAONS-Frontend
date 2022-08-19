@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ColorPartial } from '@mui/material/styles/createPalette';
-import { forwardRef } from 'react';
+import { CSSProperties, forwardRef } from 'react';
 
 const headerSX = {
   '& .MuiCardHeader-action': { mr: 0 },
@@ -13,11 +13,11 @@ type MainCardProps = {
   children?: React.ReactNode;
   content?: boolean;
   contentClass?: string;
-  contentSX?: object;
+  contentSX?: CSSProperties;
   darkTitle?: boolean;
   secondary?: React.ReactNode;
   shadow?: string;
-  sx?: object;
+  sx?: CSSProperties;
   title?: React.ReactNode;
 };
 
