@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <Layout>
       <Seo templateTitle='Login' />
-      <div className='relative flex h-screen flex-col items-center justify-center bg-corner-login bg-left-bottom bg-no-repeat'>
+      <div className='relative flex h-screen flex-col items-center justify-center bg-left-corner-decor bg-left-bottom bg-no-repeat'>
         <div className='absolute top-6'>
           <LogoTop />
         </div>
