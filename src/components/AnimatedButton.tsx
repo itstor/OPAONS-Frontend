@@ -6,17 +6,19 @@ const AnimatedButton = forwardRef(
   (
     {
       children,
-      type,
-      direction,
-      offset,
-      scale,
+      type = 'scale',
+      direction = 'right',
+      offset = 10,
+      scale = {
+        hover: 1,
+        tap: 0.9,
+      },
     }: {
       children: ReactElement;
       type?: 'rotate' | 'slide' | 'scale';
       direction?: 'up' | 'left' | 'right' | 'down';
       offset?: number;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      scale?: any;
+      scale?: { hover: number; tap: number };
     },
     ref: React.Ref<HTMLDivElement>
   ) => {
@@ -85,15 +87,5 @@ const AnimatedButton = forwardRef(
     }
   }
 );
-
-AnimatedButton.defaultProps = {
-  type: 'scale',
-  offset: 10,
-  direction: 'right',
-  scale: {
-    hover: 1,
-    tap: 0.9,
-  },
-};
 
 export default AnimatedButton;
