@@ -9,9 +9,9 @@ import { MenuItem } from '@/data/menu-items';
 const NavItem = ({ item, level, ...others }: { item: MenuItem; level: number; [x: string]: any }) => {
   const theme = useTheme();
   const router = useRouter();
-  const url = location.pathname;
+  const url = location.pathname + location.search;
 
-  const isOpened = (item.url || '').split('?')[0] === url || others.childOf === item.id;
+  const isOpened = item.url === url || others.childOf === item.id;
 
   const itemIcon = item?.icon ? (
     <FontAwesomeIcon icon={item.icon} fontSize='1.1rem' color='#774514' />
