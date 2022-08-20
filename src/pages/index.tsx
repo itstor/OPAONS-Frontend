@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
@@ -15,86 +15,88 @@ export default function HomePage() {
   return (
     <>
       <Seo templateTitle='Dashboard' />
-      <DashboardLayout title='Dashboard'>
-        <div className='w-full'>
-          <MainCard title='Kontrol Pelaksanaan'>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <Grid container direction='row' spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <SubCard title='Babak 1'>
-                    <Grid container direction='column' justifyContent='center' alignContent='center' gap={2}>
-                      <DatePicker
-                        label='Tanggal Pelaksanaan'
-                        value={value}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                      <TimePicker
-                        ampm={false}
-                        label='Waktu Mulai'
-                        value={value2}
-                        onChange={(newValue) => {
-                          setValue2(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                      <TimePicker
-                        ampm={false}
-                        label='Waktu Selesai'
-                        value={value2}
-                        onChange={(newValue) => {
-                          setValue2(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                      <Button variant='contained' color='secondary' disableElevation>
-                        Mulai
-                      </Button>
-                    </Grid>
-                  </SubCard>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <SubCard title='Babak 2'>
-                    <Grid container direction='column' justifyContent='center' alignContent='center' gap={2}>
-                      <DatePicker
-                        label='Tanggal Pelaksanaan'
-                        value={value}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                      <TimePicker
-                        ampm={false}
-                        label='Waktu Mulai'
-                        value={value2}
-                        onChange={(newValue) => {
-                          setValue2(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                      <TimePicker
-                        ampm={false}
-                        label='Waktu Selesai'
-                        value={value2}
-                        onChange={(newValue) => {
-                          setValue2(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                      <Button variant='contained' color='secondary' disableElevation>
-                        Mulai
-                      </Button>
-                    </Grid>
-                  </SubCard>
-                </Grid>
+      <div className='w-full'>
+        <MainCard title='Kontrol Pelaksanaan'>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <Grid container direction='row' spacing={2}>
+              <Grid item xs={12} md={6}>
+                <SubCard title='Babak 1'>
+                  <Grid container direction='column' justifyContent='center' alignContent='center' gap={2}>
+                    <DatePicker
+                      label='Tanggal Pelaksanaan'
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <TimePicker
+                      ampm={false}
+                      label='Waktu Mulai'
+                      value={value2}
+                      onChange={(newValue) => {
+                        setValue2(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <TimePicker
+                      ampm={false}
+                      label='Waktu Selesai'
+                      value={value2}
+                      onChange={(newValue) => {
+                        setValue2(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <Button variant='contained' color='secondary' disableElevation>
+                      Mulai
+                    </Button>
+                  </Grid>
+                </SubCard>
               </Grid>
-            </LocalizationProvider>
-          </MainCard>
-        </div>
-      </DashboardLayout>
+              <Grid item xs={12} md={6}>
+                <SubCard title='Babak 2'>
+                  <Grid container direction='column' justifyContent='center' alignContent='center' gap={2}>
+                    <DatePicker
+                      label='Tanggal Pelaksanaan'
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <TimePicker
+                      ampm={false}
+                      label='Waktu Mulai'
+                      value={value2}
+                      onChange={(newValue) => {
+                        setValue2(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <TimePicker
+                      ampm={false}
+                      label='Waktu Selesai'
+                      value={value2}
+                      onChange={(newValue) => {
+                        setValue2(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    <Button variant='contained' color='secondary' disableElevation>
+                      Mulai
+                    </Button>
+                  </Grid>
+                </SubCard>
+              </Grid>
+            </Grid>
+          </LocalizationProvider>
+        </MainCard>
+      </div>
     </>
   );
 }
+
+HomePage.getLayout = function getLayout(page: ReactElement): JSX.Element {
+  return <DashboardLayout title='Dashboard'>{page}</DashboardLayout>;
+};

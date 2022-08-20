@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Grid, TextField, Tooltip, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables';
+import { ReactElement } from 'react';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 
@@ -14,7 +15,7 @@ import SubCard from '@/components/SubCard';
 
 import { generatePassword, generateUsername } from '@/ts/utils/generator';
 
-export default function Peserta() {
+export default function ManagePesertaPage() {
   const formSchema = yup.object().shape({
     name: yup.string().required('Nama tim tidak boleh kosong'),
     phone: yup
@@ -96,102 +97,105 @@ export default function Peserta() {
   return (
     <>
       <Seo templateTitle='Dashboard' />
-      <DashboardLayout title='Manage Peserta'>
-        <div className='w-full'>
-          <Grid container direction='column' gap={2}>
-            <MainCard title='Tambah Peserta'>
-              <form onSubmit={formValidation.handleSubmit}>
-                <Grid container direction='column' gap={2}>
-                  <SubCard title='Data Tim'>
-                    <Grid container direction='row' spacing={2} className='max-w-full md:max-w-[350px] lg:max-w-[650px]' marginX='auto'>
-                      <Grid item xs={12} md={6}>
-                        <TextField
-                          label='Nama Tim'
-                          name='name'
-                          variant='outlined'
-                          fullWidth
-                          onChange={formValidation.handleChange}
-                          onBlur={formValidation.handleBlur}
-                          value={formValidation.values.name}
-                          error={formValidation.touched.name && formValidation.errors.name ? true : false}
-                          helperText={formValidation.touched.name && formValidation.errors.name ? formValidation.errors.name : ''}
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <TextField
-                          label='Nomor Telepon'
-                          name='phone'
-                          variant='outlined'
-                          fullWidth
-                          onChange={formValidation.handleChange}
-                          onBlur={formValidation.handleBlur}
-                          value={formValidation.values.phone}
-                          error={formValidation.touched.phone && formValidation.errors.phone ? true : false}
-                          helperText={formValidation.touched.phone && formValidation.errors.phone ? formValidation.errors.phone : ''}
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <TextField
-                          label='Asal Sekolah'
-                          name='school'
-                          variant='outlined'
-                          fullWidth
-                          onChange={formValidation.handleChange}
-                          onBlur={formValidation.handleBlur}
-                          value={formValidation.values.school}
-                          error={formValidation.touched.school && formValidation.errors.school ? true : false}
-                          helperText={formValidation.touched.school && formValidation.errors.school ? formValidation.errors.school : ''}
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <TextField
-                          label='Email'
-                          name='email'
-                          variant='outlined'
-                          fullWidth
-                          onChange={formValidation.handleChange}
-                          onBlur={formValidation.handleBlur}
-                          value={formValidation.values.email}
-                          error={formValidation.touched.email && formValidation.errors.email ? true : false}
-                          helperText={formValidation.touched.email && formValidation.errors.email ? formValidation.errors.email : ''}
-                        />
-                      </Grid>
+
+      <div className='w-full'>
+        <Grid container direction='column' gap={2}>
+          <MainCard title='Tambah Peserta'>
+            <form onSubmit={formValidation.handleSubmit}>
+              <Grid container direction='column' gap={2}>
+                <SubCard title='Data Tim'>
+                  <Grid container direction='row' spacing={2} className='max-w-full md:max-w-[350px] lg:max-w-[650px]' marginX='auto'>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label='Nama Tim'
+                        name='name'
+                        variant='outlined'
+                        fullWidth
+                        onChange={formValidation.handleChange}
+                        onBlur={formValidation.handleBlur}
+                        value={formValidation.values.name}
+                        error={formValidation.touched.name && formValidation.errors.name ? true : false}
+                        helperText={formValidation.touched.name && formValidation.errors.name ? formValidation.errors.name : ''}
+                      />
                     </Grid>
-                  </SubCard>
-                  <SubCard
-                    title='Data Anggota'
-                    secondary={
-                      <Tooltip title='Generate random username and password'>
-                        <Button onClick={onAutoGenerateClick} startIcon={<FontAwesomeIcon icon={faRandom} />}>
-                          Auto Generate
-                        </Button>
-                      </Tooltip>
-                    }
-                  >
-                    <Grid container direction='column' gap={2} className='max-w-full md:max-w-[350px] lg:max-w-[650px]' marginX='auto'>
-                      <DataAnggotaForm title='Anggota 1' validation={formValidation} username='username1' password='password1' />
-                      <DataAnggotaForm title='Anggota 2' validation={formValidation} username='username2' password='password2' />
-                      <DataAnggotaForm title='Anggota 3' validation={formValidation} username='username3' password='password3' />
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label='Nomor Telepon'
+                        name='phone'
+                        variant='outlined'
+                        fullWidth
+                        onChange={formValidation.handleChange}
+                        onBlur={formValidation.handleBlur}
+                        value={formValidation.values.phone}
+                        error={formValidation.touched.phone && formValidation.errors.phone ? true : false}
+                        helperText={formValidation.touched.phone && formValidation.errors.phone ? formValidation.errors.phone : ''}
+                      />
                     </Grid>
-                  </SubCard>
-                  <Button
-                    type='submit'
-                    variant='contained'
-                    color='secondary'
-                    sx={{ width: 'fit-content', marginLeft: 'auto', marginRight: 0 }}
-                    disableElevation
-                  >
-                    Tambahkan
-                  </Button>
-                </Grid>
-              </form>
-            </MainCard>
-            <MainCard contentSX={{ padding: 0 }}>
-              <MUIDataTable title={<Typography variant='h5'>List Tim</Typography>} data={data} columns={columns} options={options} />
-            </MainCard>
-          </Grid>
-        </div>
-      </DashboardLayout>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label='Asal Sekolah'
+                        name='school'
+                        variant='outlined'
+                        fullWidth
+                        onChange={formValidation.handleChange}
+                        onBlur={formValidation.handleBlur}
+                        value={formValidation.values.school}
+                        error={formValidation.touched.school && formValidation.errors.school ? true : false}
+                        helperText={formValidation.touched.school && formValidation.errors.school ? formValidation.errors.school : ''}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label='Email'
+                        name='email'
+                        variant='outlined'
+                        fullWidth
+                        onChange={formValidation.handleChange}
+                        onBlur={formValidation.handleBlur}
+                        value={formValidation.values.email}
+                        error={formValidation.touched.email && formValidation.errors.email ? true : false}
+                        helperText={formValidation.touched.email && formValidation.errors.email ? formValidation.errors.email : ''}
+                      />
+                    </Grid>
+                  </Grid>
+                </SubCard>
+                <SubCard
+                  title='Data Anggota'
+                  secondary={
+                    <Tooltip title='Generate random username and password'>
+                      <Button onClick={onAutoGenerateClick} startIcon={<FontAwesomeIcon icon={faRandom} />}>
+                        Auto Generate
+                      </Button>
+                    </Tooltip>
+                  }
+                >
+                  <Grid container direction='column' gap={2} className='max-w-full md:max-w-[350px] lg:max-w-[650px]' marginX='auto'>
+                    <DataAnggotaForm title='Anggota 1' validation={formValidation} username='username1' password='password1' />
+                    <DataAnggotaForm title='Anggota 2' validation={formValidation} username='username2' password='password2' />
+                    <DataAnggotaForm title='Anggota 3' validation={formValidation} username='username3' password='password3' />
+                  </Grid>
+                </SubCard>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='secondary'
+                  sx={{ width: 'fit-content', marginLeft: 'auto', marginRight: 0 }}
+                  disableElevation
+                >
+                  Tambahkan
+                </Button>
+              </Grid>
+            </form>
+          </MainCard>
+          <MainCard contentSX={{ padding: 0 }}>
+            <MUIDataTable title={<Typography variant='h5'>List Tim</Typography>} data={data} columns={columns} options={options} />
+          </MainCard>
+        </Grid>
+      </div>
     </>
   );
 }
+
+ManagePesertaPage.getLayout = function getLayout(page: ReactElement): JSX.Element {
+  return <DashboardLayout title='Manage Peserta'>{page}</DashboardLayout>;
+};

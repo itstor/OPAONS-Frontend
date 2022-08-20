@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
 import { GetServerSideProps } from 'next';
+import { ReactElement } from 'react';
 import * as yup from 'yup';
 
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
@@ -9,37 +10,33 @@ import Seo from '@/components/Seo';
 
 import NotFoundPage from '@/pages/404';
 
-function RankingPage({ babak, kategori, isValid }: { babak: number; kategori: string; isValid: boolean }) {
+const RankingPage = ({ isValid }: { babak: number; kategori: string; isValid: boolean }) => {
   if (!isValid) {
     return <NotFoundPage />;
   }
 
-  kategori = kategori.toUpperCase();
-
   return (
     <>
       <Seo templateTitle='Dashboard' />
-      <DashboardLayout title={`Ranking Babak ${babak} Kategori ${kategori}`}>
-        <div className='w-full'>
-          <Grid container direction='column' gap={2}>
-            <Grid container direction='row' spacing={2}>
-              <Grid item xs={6} md={4}>
-                <RankingCard isLoading={false} type='max' value={120} />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <RankingCard isLoading={false} type='min' value={80} />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <RankingCard isLoading={false} type='mean' value={101.4} />
-              </Grid>
+      <div className='w-full'>
+        <Grid container direction='column' gap={2}>
+          <Grid container direction='row' spacing={2}>
+            <Grid item xs={6} md={4}>
+              <RankingCard isLoading={false} type='max' value={120} />
             </Grid>
-            <MainCard title='Ranking'>Ranking Table Here</MainCard>
+            <Grid item xs={6} md={4}>
+              <RankingCard isLoading={false} type='min' value={80} />
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <RankingCard isLoading={false} type='mean' value={101.4} />
+            </Grid>
           </Grid>
-        </div>
-      </DashboardLayout>
+          <MainCard title='Ranking'>Ranking Table Here</MainCard>
+        </Grid>
+      </div>
     </>
   );
-}
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { babak, kategori } = context.query;
@@ -55,3 +52,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default RankingPage;
+
+// eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-explicit-any
+RankingPage.getLayout = function getLayout(page: ReactElement, pageProps: any): JSX.Element {
+  const kategori = pageProps.kategori.toUpperCase();
+
+  return <DashboardLayout title={`Ranking Babak ${pageProps.babak} Kategori ${kategori}`}>{page}</DashboardLayout>;
+};

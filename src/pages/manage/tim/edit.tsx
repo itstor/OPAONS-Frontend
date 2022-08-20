@@ -1,5 +1,6 @@
 import { Button, CircularProgress, Grid, TextField } from '@mui/material';
 import { useFormik } from 'formik';
+import { ReactElement } from 'react';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 
@@ -146,3 +147,7 @@ export default function EditPesertaPage() {
     </>
   );
 }
+
+EditPesertaPage.getLayout = function getLayout(page: ReactElement): JSX.Element {
+  return <DashboardLayout title='Edit Peserta'>{page}</DashboardLayout>;
+};
