@@ -9,7 +9,7 @@ import NextNProgress from 'nextjs-progressbar';
 import * as React from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import '@/styles/globals.css';
+import '@/styles/css/globals.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
 import theme from '@/styles/themes';
