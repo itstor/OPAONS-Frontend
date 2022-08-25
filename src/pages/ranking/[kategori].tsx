@@ -10,10 +10,8 @@ import Seo from '@/components/Seo';
 
 import NotFoundPage from '@/pages/404';
 
-const RankingPage = ({ isValid }: { babak: number; kategori: string; isValid: boolean }) => {
-  if (!isValid) {
-    return <NotFoundPage />;
-  }
+const RankingPage = () => {
+  // const nilaiMaximum = useSWR({}, TeamService.getAllTeams);
 
   return (
     <>
@@ -55,6 +53,10 @@ export default RankingPage;
 
 // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-explicit-any
 RankingPage.getLayout = function getLayout(page: ReactElement, pageProps: any): JSX.Element {
+  if (!pageProps.isValid) {
+    return <NotFoundPage />;
+  }
+
   const kategori = pageProps.kategori.toUpperCase();
 
   return <DashboardLayout title={`Ranking Babak ${pageProps.babak} Kategori ${kategori}`}>{page}</DashboardLayout>;
