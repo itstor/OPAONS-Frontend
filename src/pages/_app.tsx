@@ -2,6 +2,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -12,10 +13,13 @@ import { Toaster } from 'react-hot-toast';
 import '@/styles/css/globals.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
+import { AuthProvider } from '@/context/AuthProvider';
 import theme from '@/styles/themes';
 import createEmotionCache from '@/utils/createEmotionCache';
 
 config.autoAddCss = false;
+
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -34,18 +38,20 @@ export default function MyApp(props: MyAppProps) {
   const getLayout = Component.getLayout ?? ((page: React.ReactNode, pageProps: any) => page);
 
   return (
-    <StyledEngineProvider injectFirst>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <meta name='viewport' content='initial-scale=1, width=device-width' />
-        </Head>
-        <ThemeProvider theme={theme()}>
-          <CssBaseline />
-          <NextNProgress color='#774514' />
-          {getLayout(<Component {...pageProps} />, pageProps)}
-          <Toaster />
-        </ThemeProvider>
-      </CacheProvider>
-    </StyledEngineProvider>
+    <AuthProvider>
+      <StyledEngineProvider injectFirst>
+        <CacheProvider value={emotionCache}>
+          <Head>
+            <meta name='viewport' content='initial-scale=1, width=device-width' />
+          </Head>
+          <ThemeProvider theme={theme()}>
+            <CssBaseline />
+            <NextNProgress color='#774514' />
+            {getLayout(<Component {...pageProps} />, pageProps)}
+            <Toaster />
+          </ThemeProvider>
+        </CacheProvider>
+      </StyledEngineProvider>
+    </AuthProvider>
   );
 }
