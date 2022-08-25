@@ -3,7 +3,7 @@ import { Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/ma
 import { FormikProps } from 'formik';
 import { useState } from 'react';
 
-import { DataPesertaForm, PasswordTypesForm, UsernameTypesForm } from '@/ts/interfaces/DataPeserta.interface';
+import { PasswordTypesForm, TeamFormikInitialValuesInterface, UsernameTypesForm } from '@/ts/interfaces/Team.interface';
 
 export default function DataAnggotaForm({
   title,
@@ -12,7 +12,7 @@ export default function DataAnggotaForm({
   password,
 }: {
   title: string;
-  validation: FormikProps<DataPesertaForm>;
+  validation: FormikProps<TeamFormikInitialValuesInterface>;
   username: UsernameTypesForm;
   password: PasswordTypesForm;
 }) {
