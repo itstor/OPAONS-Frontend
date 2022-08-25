@@ -1,9 +1,10 @@
 import { faRandom } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Grid, TextField, Tooltip, Typography } from '@mui/material';
+import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Tooltip } from '@mui/material';
+import axios, { AxiosError } from 'axios';
 import { useFormik } from 'formik';
-import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables';
-import { ReactElement } from 'react';
+import { ApiError } from 'next/dist/server/api-utils';
+import { ReactElement, useRef } from 'react';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 
@@ -12,10 +13,15 @@ import MainCard from '@/components/MainCard';
 import DataAnggotaForm from '@/components/manage/peserta/DataAnggotaForm';
 import Seo from '@/components/Seo';
 import SubCard from '@/components/SubCard';
+import TableTeam, { TableTeamRef } from '@/components/table/TeamTable';
 
+import TeamService from '@/services/Team.service';
+import { TeamFormikInitialValuesInterface } from '@/ts/interfaces/Team.interface';
 import { generatePassword, generateUsername } from '@/ts/utils/generator';
 
 export default function ManagePesertaPage() {
+  const tableRef = useRef<TableTeamRef>();
+
   const formSchema = yup.object().shape({
     name: yup.string().required('Nama tim tidak boleh kosong'),
     phone: yup
@@ -24,6 +30,7 @@ export default function ManagePesertaPage() {
       .matches(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/g, 'Nomor telepon tidak valid'),
     school: yup.string().required('Asal sekolah tidak boleh kosong'),
     email: yup.string().email('Email tidak valid').required('Email tidak boleh kosong'),
+    kategori: yup.string().required('Kategori tidak boleh kosong'),
     username1: yup.string().required('Username tidak boleh kosong'),
     password1: yup.string().required('Password tidak boleh kosong'),
     username2: yup.string(),
@@ -40,12 +47,13 @@ export default function ManagePesertaPage() {
     }),
   });
 
-  const formValidation = useFormik({
+  const formValidation = useFormik<TeamFormikInitialValuesInterface>({
     initialValues: {
       name: '',
       phone: '',
       school: '',
       email: '',
+      kategori: 'SMA',
       username1: '',
       password1: '',
       username2: '',
@@ -55,27 +63,48 @@ export default function ManagePesertaPage() {
     },
     validationSchema: formSchema,
     onSubmit: () => {
-      toast.success('Tambah tim berhasil');
-      // console.log(values);
-      formValidation.resetForm();
+      formValidation.setSubmitting(true);
+
+      TeamService.createTeam({
+        team: {
+          name: formValidation.values.name,
+          phone: formValidation.values.phone,
+          school: formValidation.values.school,
+          email: formValidation.values.email,
+          schoolType: formValidation.values.kategori,
+        },
+        user1: {
+          username: formValidation.values.username1,
+          password: formValidation.values.password1,
+        },
+        user2: {
+          username: formValidation.values.username2,
+          password: formValidation.values.password2,
+        },
+        user3: {
+          username: formValidation.values.username3,
+          password: formValidation.values.password3,
+        },
+      })
+        .then(() => {
+          toast.success('Tim berhasil dibuat');
+          formValidation.resetForm();
+          tableRef.current?.getData({});
+        })
+        .catch((err: Error | AxiosError) => {
+          if (axios.isAxiosError(err)) {
+            toast.error((err.response?.data as ApiError).message);
+
+            return;
+          }
+
+          toast.error('Terjadi kesalahan');
+        })
+        .finally(() => {
+          formValidation.setSubmitting(false);
+        });
     },
   });
-
-  const columns = ['Nama Tim', 'Nomor Telepon', 'Asal Sekolah', 'Email', 'Action'];
-
-  const data = [
-    ['Joe James', 'joe@gmail.com', 'Institut Teknologi Sepuluh Nopember', '+628886667761'],
-    ['John Walsh', 'joe@gmail.com', 'Institut Teknologi Sepuluh Nopember', '+628886667761'],
-    ['Bob Herm', 'joe@gmail.com', 'Institut Teknologi Sepuluh Nopember', '+628886667761'],
-    ['James Houston', 'joe@gmail.com', 'Institut Teknologi Sepuluh Nopember', '+628886667761'],
-  ];
-
-  const options: MUIDataTableOptions = {
-    filterType: 'checkbox',
-    elevation: 0,
-    print: false,
-    search: false,
-  };
 
   const onAutoGenerateClick = () => {
     const teamName = formValidation.values.name;
@@ -105,6 +134,24 @@ export default function ManagePesertaPage() {
               <Grid container direction='column' gap={2}>
                 <SubCard title='Data Tim'>
                   <Grid container direction='row' spacing={2} className='max-w-full md:max-w-[350px] lg:max-w-[650px]' marginX='auto'>
+                    <Grid item xs={12} md={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Kategori</InputLabel>
+                        <Select
+                          id='kategori'
+                          name='kategori'
+                          label='Kategori'
+                          value={formValidation.values.kategori}
+                          onChange={formValidation.handleChange}
+                        >
+                          {['SMA', 'SMK'].map((kategori: string) => (
+                            <MenuItem key={kategori} value={kategori}>
+                              {kategori}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
                     <Grid item xs={12} md={6}>
                       <TextField
                         label='Nama Tim'
@@ -180,15 +227,16 @@ export default function ManagePesertaPage() {
                   variant='contained'
                   color='secondary'
                   sx={{ width: 'fit-content', marginLeft: 'auto', marginRight: 0 }}
+                  disabled={formValidation.isSubmitting}
                   disableElevation
                 >
-                  Tambahkan
+                  {formValidation.isSubmitting ? <CircularProgress size={24} /> : 'Tambahkan'}
                 </Button>
               </Grid>
             </form>
           </MainCard>
           <MainCard contentSX={{ padding: 0 }}>
-            <MUIDataTable title={<Typography variant='h5'>List Tim</Typography>} data={data} columns={columns} options={options} />
+            <TableTeam ref={tableRef} />
           </MainCard>
         </Grid>
       </div>
@@ -197,5 +245,5 @@ export default function ManagePesertaPage() {
 }
 
 ManagePesertaPage.getLayout = function getLayout(page: ReactElement): JSX.Element {
-  return <DashboardLayout title='Manage Peserta'>{page}</DashboardLayout>;
+  return <DashboardLayout title='Manage Tim'>{page}</DashboardLayout>;
 };
