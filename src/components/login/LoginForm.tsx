@@ -15,17 +15,19 @@ import {
 import { Formik } from 'formik';
 import Image from 'next/image';
 import { MouseEvent, useState } from 'react';
-import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 
 import useScriptRef from '@/hooks/useScriptRef';
 
 import AnimatedButton from '@/components/AnimatedButton';
 
+import { useAuth } from '@/context/AuthProvider';
+
 import LogoOPA from '~/images/logo-opa.webp';
 
 export default function LoginForm() {
   const theme = useTheme();
+  const auth = useAuth();
   const scriptedRef = useScriptRef();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -69,8 +71,8 @@ export default function LoginForm() {
                 setStatus({ success: true });
                 setSubmitting(false);
               }
-              //TODO : Call Login API Here
-              toast.error('Backend not implemented yet');
+
+              auth?.login(values.username, values.password);
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
               if (scriptedRef.current) {

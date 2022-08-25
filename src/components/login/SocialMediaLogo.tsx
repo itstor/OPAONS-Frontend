@@ -13,7 +13,7 @@ export default function SocialMediaLogo({ logo, title, link }: { logo: IconDefin
         <div className='flex h-[26px] w-[26px] items-center justify-center rounded-full bg-primary-800 p-[2px]'>
           <FontAwesomeIcon icon={logo} size='sm' color='#fff6e7' />
         </div>
-        <caption className='text-center text-xs font-medium'>{title}</caption>
+        <div className='text-center text-xs font-medium'>{title}</div>
       </div>
     </a>
   );
