@@ -10,11 +10,7 @@ import Seo from '@/components/Seo';
 
 import NotFoundPage from '@/pages/404';
 
-function ReviewPage({ isValid }: { babak: number; kategori: string; isValid: boolean }) {
-  if (!isValid) {
-    return <NotFoundPage />;
-  }
-
+function ReviewPage() {
   return (
     <>
       <Seo templateTitle='Dashboard' />
@@ -55,6 +51,10 @@ export default ReviewPage;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ReviewPage.getLayout = function getLayout(page: ReactElement, pageProps: any): JSX.Element {
+  if (!pageProps.isValid) {
+    return <NotFoundPage />;
+  }
+
   return (
     <DashboardLayout title={`Koreksi Jawaban Babak ${pageProps.babak} Kategori ` + pageProps.kategori.toUpperCase()}>
       {page}
