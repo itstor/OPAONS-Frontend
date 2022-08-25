@@ -1,3 +1,4 @@
+import { faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { Box, Drawer, Theme, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -8,6 +9,9 @@ import { items } from '@/data/menu-items';
 
 import LogoSection from '@/components/layout/DashboardLayout/LogoSection';
 import NavGroup from '@/components/layout/DashboardLayout/NavGroup';
+import NavItem from '@/components/layout/DashboardLayout/NavItem';
+
+import { useAuth } from '@/context/AuthProvider';
 
 export default function Sidebar({
   isMobileSidebarOpen,
@@ -22,6 +26,7 @@ export default function Sidebar({
   [key: string]: any;
 }) {
   // const [open, setOpen] = React.useState(true);
+  const { logout } = useAuth();
 
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
@@ -57,6 +62,7 @@ export default function Sidebar({
             }
           })}
         </Box>
+        <NavItem item={{ type: 'item', title: 'Logout', id: 'logout', icon: faSignOut }} level={1} onClick={() => logout()} />
       </Box>
     </PerfectScrollbar>
   );

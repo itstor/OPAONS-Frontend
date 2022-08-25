@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { MenuItem } from '@/data/menu-items';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const NavItem = ({ item, level, ...others }: { item: MenuItem; level: number; [x: string]: any }) => {
+const NavItem = ({ item, level, onClick, ...others }: { item: MenuItem; level: number; onClick?: () => void; [x: string]: any }) => {
   const theme = useTheme();
   const router = useRouter();
   const url = location.pathname + location.search;
@@ -37,7 +37,7 @@ const NavItem = ({ item, level, ...others }: { item: MenuItem; level: number; [x
         pl: `${level * 24}px`,
       }}
       selected={isOpened}
-      onClick={() => router.push(`${item.url}`)}
+      onClick={item.url ? () => router.push(`${item.url}`) : onClick}
     >
       <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>{itemIcon}</ListItemIcon>
       <ListItemText
