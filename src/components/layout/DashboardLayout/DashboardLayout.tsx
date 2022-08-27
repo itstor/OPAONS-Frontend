@@ -1,5 +1,6 @@
 import { Box, Container, styled, Theme, useMediaQuery } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import Header from '@/components/layout/DashboardLayout/Header';
 import Sidebar from '@/components/layout/DashboardLayout/Sidebar';
@@ -47,6 +48,12 @@ export default function DashboardLayout({
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+  const router = useRouter();
+
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [router.pathname]);
+
   return (
     <MainWrapper>
       <Header
