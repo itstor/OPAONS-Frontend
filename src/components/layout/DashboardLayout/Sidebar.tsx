@@ -1,7 +1,7 @@
 import { faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { Box, Drawer, Theme, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import SimpleBar from 'simplebar-react';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 
@@ -40,12 +40,7 @@ export default function Sidebar({
   // };
 
   const SidebarContent = (
-    <PerfectScrollbar
-      component='div'
-      style={{
-        height: !mdUp ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
-      }}
-    >
+    <SimpleBar style={{ maxHeight: mdUp ? 'calc(100vh - 45px)' : '100vh' }}>
       <Box px={2} py={3} height='100%'>
         <LogoSection />
         <Box mt={2}>
@@ -64,7 +59,7 @@ export default function Sidebar({
         </Box>
         <NavItem item={{ type: 'item', title: 'Logout', id: 'logout', icon: faSignOut }} level={1} onClick={() => logout()} />
       </Box>
-    </PerfectScrollbar>
+    </SimpleBar>
   );
   if (lgUp) {
     return (

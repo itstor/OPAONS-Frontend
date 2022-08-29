@@ -10,7 +10,7 @@ export default function LogoSection() {
     <ButtonBase disableRipple onClick={() => router.push('/')}>
       <Grid container justifyContent='start' alignItems='center' gap={1.5}>
         <Image src={Logo} alt='Logo' width={60} height={60} objectFit='scale-down' />
-        <Typography variant='h3' fontWeight='bold' color='primary'>
+        <Typography variant='h3' fontWeight='bold' color='primary.dark'>
           OPAUNS
         </Typography>
       </Grid>

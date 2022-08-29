@@ -1,6 +1,6 @@
 import { faArrowLeft, faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AppBar, Grid, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
+import { AppBar, Grid, IconButton, Theme, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { CSSProperties } from 'react';
 
@@ -24,9 +24,10 @@ export default function Header({
 }) {
   const theme = useTheme();
   const router = useRouter();
+  const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
 
   const titleComponent = title ? (
-    <Typography variant='h3' color={theme.palette.primary.dark}>
+    <Typography variant='h3' fontSize={mdUp ? '1.25rem' : '1rem'} color={theme.palette.primary.dark}>
       {title}
     </Typography>
   ) : (
