@@ -3,14 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import { useFormik } from 'formik';
-import { GetServerSideProps } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
+import { useRouter } from 'next/router';
 import { ReactElement, useRef } from 'react';
+import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useCopyToClipboard } from 'usehooks-ts';
 import * as yup from 'yup';
 
-import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import DataAnggotaForm from '@/components/manage/peserta/DataAnggotaForm';
@@ -18,6 +18,7 @@ import Seo from '@/components/Seo';
 import SubCard from '@/components/SubCard';
 import TableTeam, { TableTeamRef } from '@/components/table/TeamTable';
 
+import { useAuth } from '@/context/AuthProvider';
 import TeamService from '@/services/Team.service';
 import { TeamFormikInitialValuesInterface } from '@/ts/interfaces/Team.interface';
 import Format from '@/ts/utils/formatter';
@@ -26,6 +27,15 @@ import { generatePassword, generateUsername } from '@/ts/utils/generator';
 export default function ManagePesertaPage() {
   const tableRef = useRef<TableTeamRef>();
   const [, copy] = useCopyToClipboard();
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/auth/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   const formSchema = yup.object().shape({
     name: yup.string().required('Nama tim tidak boleh kosong'),
@@ -255,29 +265,29 @@ export default function ManagePesertaPage() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { isAuthenticated, role } = getSession(context);
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { isAuthenticated, role } = getSession(context);
 
-  if (!isAuthenticated) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    };
-  }
+//   if (!isAuthenticated) {
+//     return {
+//       redirect: {
+//         destination: '/auth/login',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  if (role !== 'admin') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+//   if (role !== 'admin') {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return { props: { isAuthenticated, role } };
-};
+//   return { props: { isAuthenticated, role } };
+// };
 
 ManagePesertaPage.getLayout = function getLayout(page: ReactElement): JSX.Element {
   return <DashboardLayout title='Manage Tim'>{page}</DashboardLayout>;
