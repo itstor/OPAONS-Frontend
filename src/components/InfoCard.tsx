@@ -42,49 +42,43 @@ export default function InfoCard({
   const theme = useTheme();
 
   return (
-    <>
-      {isLoading ? (
-        <></>
-      ) : (
-        <CardWrapper border={false} content={false}>
-          <Box sx={{ p: 2 }}>
-            <List sx={{ py: 0 }}>
-              <ListItem alignItems='center' disableGutters sx={{ py: 0 }}>
-                <ListItemAvatar>
-                  <Avatar
-                    variant='rounded'
-                    sx={{
-                      backgroundColor: theme.palette.secondary.light,
-                      color: theme.palette.primary.dark,
-                    }}
-                  >
-                    {icon}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
+    <CardWrapper border={false} content={false}>
+      <Box sx={{ p: 2 }}>
+        <List sx={{ py: 0 }}>
+          <ListItem alignItems='center' disableGutters sx={{ py: 0 }}>
+            <ListItemAvatar>
+              <Avatar
+                variant='rounded'
+                sx={{
+                  backgroundColor: theme.palette.secondary.light,
+                  color: theme.palette.primary.dark,
+                }}
+              >
+                {icon}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              sx={{
+                py: 0,
+                mt: 0.45,
+                mb: 0.45,
+              }}
+              secondary={<Typography variant='h4'>{isLoading ? '0' : value}</Typography>}
+              primary={
+                <Typography
+                  variant='subtitle2'
                   sx={{
-                    py: 0,
-                    mt: 0.45,
-                    mb: 0.45,
+                    color: theme.palette.grey[500],
+                    mt: 0.5,
                   }}
-                  secondary={<Typography variant='h4'>{value}</Typography>}
-                  primary={
-                    <Typography
-                      variant='subtitle2'
-                      sx={{
-                        color: theme.palette.grey[500],
-                        mt: 0.5,
-                      }}
-                    >
-                      {title}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            </List>
-          </Box>
-        </CardWrapper>
-      )}
-    </>
+                >
+                  {title}
+                </Typography>
+              }
+            />
+          </ListItem>
+        </List>
+      </Box>
+    </CardWrapper>
   );
 }

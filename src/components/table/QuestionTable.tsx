@@ -1,7 +1,7 @@
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
+import { CircularProgress, IconButton, TableCell, Tooltip, Typography } from '@mui/material';
 import { AxiosResponse } from 'axios';
 import moment from 'moment';
 import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables';
@@ -12,15 +12,16 @@ import striptags from 'striptags';
 
 import DifficultyChip from '@/components/DifficultyChip';
 import TipeSoalChip from '@/components/KategoriSoalChip';
+import SoalCard from '@/components/SoalCard';
 
 import SoalService from '@/services/Soal.service';
 import { PagingInterface } from '@/ts/interfaces/Pagination.interface';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
-import { SoalInterface, TipeSoal } from '@/ts/interfaces/Soal.interface';
+import { Difficulty, PilganType, SoalInterface, TipeSoal } from '@/ts/interfaces/Soal.interface';
 import { TableSortOrder, TableState } from '@/ts/interfaces/Table.interface';
 
-class QuestionTable extends Component<{ babak: number; kategori: string }, TableState> {
-  state: TableState = {
+class QuestionTable extends Component<{ babak: number; kategori: string }, TableState<SoalInterface & DefaultResponseInterface>> {
+  state: TableState<SoalInterface & DefaultResponseInterface> = {
     page: 1,
     rowsPerPage: 5,
     isLoading: false,
@@ -51,11 +52,10 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
             style: {
               minWidth: '600px',
               maxWidth: '600px',
-              maxHeight: '1rem',
             },
           }),
           customBodyRender(value) {
-            return striptags(value);
+            return <div className='max-h-4 overflow-hidden text-ellipsis'>{striptags(value)}</div>;
           },
         },
       },
@@ -76,7 +76,10 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
         name: 'difficulty',
         label: 'Kesulitan',
         options: {
-          filter: false,
+          filter: true,
+          filterOptions: {
+            names: Object.keys(Difficulty),
+          },
           customBodyRender(value) {
             return <DifficultyChip difficulty={value} />;
           },
@@ -96,7 +99,7 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
                   <IconButton
                     size='small'
                     onClick={() => {
-                      Router.push(`/manage/tim/edit?id=${value}`);
+                      Router.push(`/soal/edit?id=${value}`);
                     }}
                   >
                     <FontAwesomeIcon icon={faEdit} />
@@ -249,10 +252,30 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
       },
       expandableRows: true,
       expandableRowsHeader: false,
-      renderExpandableRow() {
-        return <div className='w-full'>Render Soal Here</div>;
+      renderExpandableRow(rowData, rowMeta) {
+        if (!self.state?.data) {
+          return <>Cannot Load Question</>;
+        }
+
+        try {
+          return (
+            <TableCell colSpan={6}>
+              <SoalCard
+                question={self.state?.data[rowMeta.dataIndex].question}
+                type={self.state?.data[rowMeta.dataIndex].type as keyof typeof TipeSoal}
+                multipleChoice={self.state?.data[rowMeta.dataIndex].multipleChoice}
+                correctAnswer={self.state?.data[rowMeta.dataIndex].answer as PilganType}
+                selectedAnswer={self.state?.data[rowMeta.dataIndex].answer as PilganType}
+                showCorrectAnswer={true}
+              />
+            </TableCell>
+          );
+        } catch (e) {
+          return <>Cannot load question</>;
+        }
       },
     };
+
     return (
       <MUIDataTable
         title={

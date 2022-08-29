@@ -12,9 +12,10 @@ import KategoriSekolahChip from '@/components/KategoriSekolahChip';
 import TeamService from '@/services/Team.service';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
 import { TableSortOrder, TableState } from '@/ts/interfaces/Table.interface';
+import { TeamInterface } from '@/ts/interfaces/Team.interface';
 
 class TeamTable extends Component {
-  state: Readonly<TableState> = {
+  state: TableState<TeamInterface & DefaultResponseInterface> = {
     page: 1,
     rowsPerPage: 5,
     isLoading: false,

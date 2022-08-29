@@ -1,25 +1,78 @@
-import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary, Grid, Typography } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import { Editor } from '@tinymce/tinymce-react';
-import { memo, useState } from 'react';
+import { useFormik } from 'formik';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-export default memo(function FormJawabanPilgan({ handlePilganChange }: { handlePilganChange?: (id: number, value: string) => void }) {
-  const [expanded, setExpanded] = useState<number | false>(false);
+import { PilganType } from '@/ts/interfaces/Soal.interface';
 
-  const handleChange = (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+export interface FormJawabanPilganRef {
+  getValues: () => string[];
+  resetForm: () => void;
+  setValues: (values: string[]) => void;
+}
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const TextEditor = ({ id }: { id: number }) => {
-    return (
+export const FormJawabanPilgan = forwardRef<FormJawabanPilganRef, { handleChange: (value: string[]) => void }>((props, ref) => {
+  useImperativeHandle(ref, () => ({
+    getValues: () => {
+      return Object.values(formik.values);
+    },
+    resetForm: () => {
+      formik.resetForm();
+    },
+    setValues: (values: string[]) => {
+      Object.keys(formik.values).forEach((key, index) => {
+        formik.setFieldValue(key, values[index], false);
+      });
+    },
+  }));
+  const [value, setValue] = useState(0);
+
+  const formik = useFormik({
+    initialValues: {
+      A: '',
+      B: '',
+      C: '',
+      D: '',
+      E: '',
+    },
+    onSubmit: () => {
+      return;
+    },
+  });
+
+  return (
+    <>
+      <Tabs
+        value={value}
+        onChange={(e, value) => {
+          setValue(value);
+        }}
+        variant='scrollable'
+      >
+        <Tab label='Pilihan A' />
+        <Tab label='Pilihan B' />
+        <Tab label='Pilihan C' />
+        <Tab label='Pilihan D' />
+        <Tab label='Pilihan E' />
+      </Tabs>
       <Editor
         tinymceScriptSrc='/js/tinymce/tinymce.min.js'
-        // onEditorChange={(value) => handlePilganChange(id, value)}
+        onEditorChange={(e) => {
+          formik.setFieldValue(`${String.fromCharCode(65 + value)}`, e).then(() => {
+            props.handleChange(Object.values(formik.values));
+          });
+        }}
+        onBlur={() => {
+          props.handleChange(Object.values(formik.values));
+        }}
+        value={formik.values[`${String.fromCharCode(65 + value)}` as PilganType]}
         init={{
-          height: 200,
-          menubar: false,
+          height: 300,
+          width: '100%',
+          menubar: true,
+          mobile: {
+            width: '100%',
+          },
           plugins: [
             'advlist',
             'autolink',
@@ -41,32 +94,9 @@ export default memo(function FormJawabanPilgan({ handlePilganChange }: { handleP
             'bold italic forecolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
             'removeformat | table',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          content_style: 'body { font-family:Poppins,Arial,sans-serif; font-size:12pt; line-height:1.5; }',
         }}
       />
-    );
-  };
-
-  const OpsiAccordion = ({ id, title }: { id: number; title: string }) => {
-    return (
-      <Accordion expanded={expanded === id} onChange={handleChange(id)}>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant='h5'>{title}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <TextEditor id={id} />
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
-
-  return (
-    <Grid container direction='column'>
-      <OpsiAccordion title='Opsi A' id={1} />
-      <OpsiAccordion title='Opsi B' id={2} />
-      <OpsiAccordion title='Opsi C' id={3} />
-      <OpsiAccordion title='Opsi D' id={4} />
-      <OpsiAccordion title='Opsi E' id={5} />
-    </Grid>
+    </>
   );
 });

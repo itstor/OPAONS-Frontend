@@ -1,104 +1,57 @@
-import { faEdit } from '@fortawesome/free-regular-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
-import moment from 'moment';
+import { CircularProgress, Typography } from '@mui/material';
 import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables';
-import Router from 'next/router';
 import { Component, ForwardedRef, forwardRef } from 'react';
 import toast from 'react-hot-toast';
-import striptags from 'striptags';
 
-import DifficultyChip from '@/components/DifficultyChip';
-import TipeSoalChip from '@/components/KategoriSoalChip';
+import UserRankingTable from '@/components/table/UserRankingTable';
 
 import SoalService from '@/services/Soal.service';
+import TeamService from '@/services/Team.service';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
-import { TipeSoal } from '@/ts/interfaces/Soal.interface';
 import { TableSortOrder, TableState } from '@/ts/interfaces/Table.interface';
+import { TeamInterface } from '@/ts/interfaces/Team.interface';
 
-class RankingTable extends Component<{ babak: number; kategori: string }, TableState> {
-  state: TableState = {
+class RankingTable extends Component<{ babak: number; kategori: string }, TableState<TeamInterface & DefaultResponseInterface>> {
+  state: TableState<TeamInterface & DefaultResponseInterface> = {
     page: 1,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
     isLoading: false,
     count: 0,
     data: [],
     sortOrder: {
-      name: 'createdAt',
+      name: 'score',
       direction: 'desc',
     },
     filter: [],
     columns: [
       {
-        name: 'createdAt',
-        label: 'Created',
-        options: {
-          filter: false,
-          customBodyRender(value) {
-            return moment(value).format('DD/MM/YYYY HH:mm');
-          },
-        },
-      },
-      {
-        name: 'question',
-        label: 'Pertanyaan',
-        options: {
-          filter: false,
-          setCellProps: () => ({
-            style: { minWidth: '600px', maxWidth: '600px', textOverflow: 'ellipsis', lineClamp: 1, overflow: 'hidden', maxHeight: '1rem' },
-          }),
-          customBodyRender(value) {
-            return striptags(value);
-          },
-        },
-      },
-      {
-        name: 'type',
-        label: 'Tipe Soal',
-        options: {
-          filter: true,
-          filterOptions: {
-            names: Object.keys(TipeSoal),
-          },
-          customBodyRender(value) {
-            return <TipeSoalChip type={value} />;
-          },
-        },
-      },
-      {
-        name: 'difficulty',
-        label: 'Kesulitan',
-        options: {
-          filter: false,
-          customBodyRender(value) {
-            return <DifficultyChip difficulty={value} />;
-          },
-        },
-      },
-      {
-        name: 'id',
-        label: 'Action',
+        name: 'score',
+        label: 'Ranking',
         options: {
           filter: false,
           sort: false,
-
-          customBodyRender(value) {
-            return (
-              <div className='flex flex-row gap-2'>
-                <Tooltip title='Edit'>
-                  <IconButton
-                    size='small'
-                    onClick={() => {
-                      Router.push(`/manage/tim/edit?id=${value}`);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            );
+          customBodyRender(value, tableMeta) {
+            return tableMeta.tableState.rowsPerPage * tableMeta.tableState.page + tableMeta.rowIndex + 1;
           },
+        },
+      },
+      {
+        name: 'name',
+        label: 'Nama Tim',
+        options: {
+          filter: false,
+          sort: false,
+          setCellProps: () => ({
+            style: { minWidth: '600px', maxWidth: '600px' },
+          }),
+        },
+      },
+      {
+        name: 'score',
+        label: 'Skor',
+        options: {
+          filter: true,
+          sort: false,
         },
       },
     ],
@@ -159,17 +112,12 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
 
     page = page || this.state.page;
     limit = limit || this.state.rowsPerPage;
-    const type = filter ? filter[2][0] : undefined;
-    const difficulty = filter ? filter[3][0] : undefined;
 
-    SoalService.getSoalAdmin({
+    TeamService.getAllTeams({
       sortBy,
       limit,
       page,
-      type,
-      difficulty,
-      school: this.props.kategori.toUpperCase(),
-      round: this.props.babak,
+      schoolType: this.props.kategori.toUpperCase(),
     })
       .then((res) => {
         this.setState({
@@ -206,6 +154,8 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
       serverSide: true,
       responsive: 'standard',
       rowsPerPageOptions: [5, 10, 25, 50, 100],
+      selectableRows: 'none',
+      filter: false,
       onTableChange(action, tableState) {
         switch (action) {
           case 'changePage':
@@ -224,29 +174,22 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
             break;
         }
       },
-      onRowsDelete(rowsDeleted) {
-        self.deleteMultipleData(rowsDeleted);
-      },
-      customToolbar() {
-        return (
-          <Tooltip title='Tambah Soal'>
-            <IconButton
-              size='small'
-              style={{ padding: 12 }}
-              className='hover:text-primary-700'
-              onClick={() => Router.push(`/soal/tambah?babak=${self.props.babak}&kategori=${self.props.kategori}`)}
-            >
-              <FontAwesomeIcon icon={faPlus} fontSize='1rem' />
-            </IconButton>
-          </Tooltip>
-        );
+      expandableRows: true,
+      expandableRowsHeader: false,
+      renderExpandableRow(rowData, rowMeta) {
+        if (self.state.data) {
+          const teamMember = self.state.data[rowMeta.dataIndex].membersId;
+          return <UserRankingTable ids={teamMember} />;
+        }
+
+        return <div>Loading...</div>;
       },
     };
     return (
       <MUIDataTable
         title={
           <Typography variant='h5'>
-            List Soal
+            Ranking
             {isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
           </Typography>
         }
