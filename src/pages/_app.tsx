@@ -12,6 +12,7 @@ import { Toaster } from 'react-hot-toast';
 
 import '@/styles/css/globals.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import 'simplebar/dist/simplebar.min.css';
 
 import { AuthProvider } from '@/context/AuthProvider';
 import theme from '@/styles/themes';

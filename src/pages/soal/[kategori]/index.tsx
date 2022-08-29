@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import { ReactElement } from 'react';
 import * as yup from 'yup';
 
+import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import Seo from '@/components/Seo';
@@ -24,6 +25,25 @@ const SoalPage = ({ babak, kategori }: { babak: number; kategori: string }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { babak, kategori } = context.query;
+  const { isAuthenticated, role } = getSession(context);
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  if (role !== 'admin') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
 
   const queryValidation = yup.object().shape({
     babak: yup.number().required().max(2).min(1),

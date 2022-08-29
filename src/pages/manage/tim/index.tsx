@@ -1,13 +1,16 @@
 import { faRandom } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Tooltip } from '@mui/material';
+import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import { useFormik } from 'formik';
+import { GetServerSideProps } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 import { ReactElement, useRef } from 'react';
 import toast from 'react-hot-toast';
+import { useCopyToClipboard } from 'usehooks-ts';
 import * as yup from 'yup';
 
+import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import DataAnggotaForm from '@/components/manage/peserta/DataAnggotaForm';
@@ -17,10 +20,12 @@ import TableTeam, { TableTeamRef } from '@/components/table/TeamTable';
 
 import TeamService from '@/services/Team.service';
 import { TeamFormikInitialValuesInterface } from '@/ts/interfaces/Team.interface';
+import Format from '@/ts/utils/formatter';
 import { generatePassword, generateUsername } from '@/ts/utils/generator';
 
 export default function ManagePesertaPage() {
   const tableRef = useRef<TableTeamRef>();
+  const [, copy] = useCopyToClipboard();
 
   const formSchema = yup.object().shape({
     name: yup.string().required('Nama tim tidak boleh kosong'),
@@ -88,6 +93,9 @@ export default function ManagePesertaPage() {
       })
         .then(() => {
           toast.success('Tim berhasil dibuat');
+          copy(Format.usernamePasswordCopy(formValidation.values)).then(() => {
+            toast.success('Username dan password berhasil disalin');
+          });
           formValidation.resetForm();
           tableRef.current?.getData({});
         })
@@ -222,6 +230,9 @@ export default function ManagePesertaPage() {
                     <DataAnggotaForm title='Anggota 3' validation={formValidation} username='username3' password='password3' />
                   </Grid>
                 </SubCard>
+                <Typography variant='body2' color='textSecondary' align='left'>
+                  <strong>Note:</strong> Password dan Username akan dicopy secara otomatis ketika peserta ditambahkan.
+                </Typography>
                 <Button
                   type='submit'
                   variant='contained'
@@ -243,6 +254,30 @@ export default function ManagePesertaPage() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { isAuthenticated, role } = getSession(context);
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  if (role !== 'admin') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { isAuthenticated, role } };
+};
 
 ManagePesertaPage.getLayout = function getLayout(page: ReactElement): JSX.Element {
   return <DashboardLayout title='Manage Tim'>{page}</DashboardLayout>;

@@ -1,17 +1,21 @@
 import { Grid } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { ReactElement } from 'react';
+import useSWR from 'swr';
 import * as yup from 'yup';
 
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import RankingCard from '@/components/ranking/RankingCard';
 import Seo from '@/components/Seo';
+import RankingTable from '@/components/table/RankingTable';
 
 import NotFoundPage from '@/pages/404';
+import TeamService from '@/services/Team.service';
 
-const RankingPage = () => {
-  // const nilaiMaximum = useSWR({}, TeamService.getAllTeams);
+const RankingPage = ({ babak, kategori }: { babak: number; kategori: string }) => {
+  const minimumScore = useSWR(TeamService.getMinimumScore);
+  const maximumScore = useSWR(TeamService.getMaximumScore);
 
   return (
     <>
@@ -19,17 +23,21 @@ const RankingPage = () => {
       <div className='w-full'>
         <Grid container direction='column' gap={2}>
           <Grid container direction='row' spacing={2}>
-            <Grid item xs={6} md={4}>
-              <RankingCard isLoading={false} type='max' value={120} />
+            <Grid item xs={12} md={6}>
+              <RankingCard isLoading={typeof maximumScore.data !== 'undefined'} type='max' value={maximumScore.data ?? 0} />
             </Grid>
-            <Grid item xs={6} md={4}>
-              <RankingCard isLoading={false} type='min' value={80} />
+            <Grid item xs={12} md={6}>
+              <RankingCard isLoading={typeof maximumScore.data !== 'undefined'} type='min' value={minimumScore.data ?? 0} />
             </Grid>
-            <Grid item xs={6} md={4}>
+            {/* <Grid item xs={6} md={4}>
               <RankingCard isLoading={false} type='mean' value={101.4} />
-            </Grid>
+            </Grid> */}
           </Grid>
-          <MainCard title='Ranking'>Ranking Table Here</MainCard>
+          <Grid item sx={{ width: '100%' }}>
+            <MainCard contentSX={{ padding: 0 }}>
+              <RankingTable babak={babak} kategori={kategori} />
+            </MainCard>
+          </Grid>
         </Grid>
       </div>
     </>

@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { useFormik } from 'formik';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import * as yup from 'yup';
 
+import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import DataAnggotaForm from '@/components/manage/peserta/DataAnggotaForm';
@@ -30,6 +32,12 @@ export default function EditPesertaPage() {
     dataTim.data ? { ids: dataTim.data?.team[0].membersId } : null,
     TeamService.getAllTeamMembers
   );
+
+  useEffect(() => {
+    if (!id) {
+      router.push('/manage/tim');
+    }
+  }, [id, router]);
 
   useEffect(() => {
     if (dataTim.data) {
@@ -125,7 +133,8 @@ export default function EditPesertaPage() {
 
       if (Object.keys(teamDataChanged).length > 0) {
         TeamService.updateTeamById(dataTim.data!.team[0]._id, teamDataChanged)
-          .then(() => {
+          .then((res: AxiosResponse<TeamInterface & DefaultResponseInterface>) => {
+            dataTim.mutate({ team: [res.data] });
             toast.success('Data tim berhasil diperbarui');
           })
           .catch((error: AxiosError<ApiError>) => {
@@ -139,6 +148,7 @@ export default function EditPesertaPage() {
         if (Object.keys(teamMember.data).length > 0) {
           UserService.updateUserById(teamMember.id, teamMember.data)
             .then(() => {
+              dataAnggota.mutate();
               toast.success('Data anggota berhasil diperbarui');
             })
             .catch((error: AxiosError<ApiError>) => {
@@ -262,6 +272,30 @@ export default function EditPesertaPage() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { isAuthenticated, role } = getSession(context);
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  if (role !== 'admin') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { isAuthenticated, role } };
+};
 
 EditPesertaPage.getLayout = function getLayout(page: ReactElement): JSX.Element {
   return (

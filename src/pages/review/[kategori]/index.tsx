@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import { ReactElement } from 'react';
 import * as yup from 'yup';
 
+import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import KoreksiCard from '@/components/review/KoreksiCard';
@@ -35,7 +36,26 @@ function ReviewPage() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { isAuthenticated, role } = getSession(context);
   const { babak, kategori } = context.query;
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  if (role !== 'admin') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
 
   const queryValidation = yup.object().shape({
     babak: yup.number().required().max(2).min(1),
@@ -55,9 +75,5 @@ ReviewPage.getLayout = function getLayout(page: ReactElement, pageProps: any): J
     return <NotFoundPage />;
   }
 
-  return (
-    <DashboardLayout title={`Koreksi Jawaban Babak ${pageProps.babak} Kategori ` + pageProps.kategori.toUpperCase()}>
-      {page}
-    </DashboardLayout>
-  );
+  return <DashboardLayout title={`Review Babak ${pageProps.babak} Kategori ` + pageProps.kategori.toUpperCase()}>{page}</DashboardLayout>;
 };

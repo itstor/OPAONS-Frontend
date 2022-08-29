@@ -4,6 +4,7 @@ import { ReactElement } from 'react';
 
 import AnimatedButton from '@/components/AnimatedButton';
 import DifficultyChip from '@/components/DifficultyChip';
+import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import JawabanNav from '@/components/review/JawabanNav';
@@ -86,6 +87,25 @@ const KoreksiJawabanTimPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { tim, babak } = context.query;
+  const { isAuthenticated, role } = getSession(context);
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  if (role !== 'admin') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
 
   return { props: { tim, babak } };
 };
