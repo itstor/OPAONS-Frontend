@@ -3,6 +3,7 @@ import axios from 'axios';
 import Router from 'next/router';
 
 import CookiesService from '@/services/Cookies.service';
+import LocalStorageService from '@/services/LocalStorage.service';
 import config from '@/ts/config/env.config';
 import { TokensInterface } from '@/ts/interfaces/Token.interface';
 
@@ -32,7 +33,19 @@ apiPrivate.interceptors.response.use(
     const originalRequest = error.config;
 
     if ((error.response.status === 401 || error.response.status === 400) && originalRequest.url === `auth/refresh-tokens`) {
+      CookiesService.clearCookies();
+      LocalStorageService.removeUser();
       Router.push('/auth/login');
+
+      return Promise.reject(error);
+    }
+
+    if (error.response.status === 403) {
+      if (error.response.data.message === 'Forbidden') {
+        CookiesService.clearCookies();
+        LocalStorageService.removeUser();
+        Router.push('/auth/login');
+      }
 
       return Promise.reject(error);
     }

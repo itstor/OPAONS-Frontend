@@ -1,15 +1,16 @@
 import Cookies from 'js-cookie';
+import moment from 'moment';
 
 import { TokenInterface, TokensInterface } from '@/ts/interfaces/Token.interface';
 
 class CookiesService {
   setTokens(tokens: TokensInterface) {
-    Cookies.set('refresh_token', tokens.refresh.token, { expires: Date.parse(tokens.refresh.expires) });
-    Cookies.set('access_token', tokens.access.token);
+    this.setAccessToken(tokens.access);
+    this.setRefreshToken(tokens.refresh);
   }
 
   setRefreshToken(refreshToken: TokenInterface) {
-    Cookies.set('refresh_token', refreshToken.token, { expires: Date.parse(refreshToken.expires) });
+    Cookies.set('refresh_token', refreshToken.token, { expires: moment(refreshToken.expires).toDate() });
   }
 
   setAccessToken(accessToken: TokenInterface) {
@@ -32,12 +33,22 @@ class CookiesService {
     Cookies.remove('access_token');
   }
 
+  removeRole() {
+    Cookies.remove('role');
+  }
+
   getAccessToken() {
     return Cookies.get('access_token');
   }
 
   getRefreshToken() {
     return Cookies.get('refresh_token');
+  }
+
+  clearCookies() {
+    this.removeAccessToken();
+    this.removeRefreshToken();
+    this.removeRole();
   }
 }
 

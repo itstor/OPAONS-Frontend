@@ -2,13 +2,13 @@ import { MUIDataTableColumn } from 'mui-datatables';
 
 export type TableSortOrder = { name: string; direction: 'desc' | 'asc' };
 
-export type TableState = {
+export type TableState<T> = {
   page?: number;
   count?: number;
   rowsPerPage?: number;
   filter?: string[][];
   sortOrder?: TableSortOrder;
-  data?: Array<object>;
+  data?: Array<T>;
   columns?: Array<MUIDataTableColumn>;
   isLoading?: boolean;
 };

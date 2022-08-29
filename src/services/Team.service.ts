@@ -38,6 +38,18 @@ class TeamService {
         throw e;
       });
   }
+
+  async getMinimumScore() {
+    return await apiPrivate
+      .get<PagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick({ limit: 1, sortBy: 'score:desc', page: 1 }))
+      .then((r) => r.data.results[0].score);
+  }
+
+  async getMaximumScore() {
+    return await apiPrivate
+      .get<PagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick({ limit: 1, sortBy: 'score:asc', page: 1 }))
+      .then((r) => r.data.results[0].score);
+  }
 }
 
 export default new TeamService();

@@ -30,3 +30,13 @@ export interface SoalInterface {
   round: number;
   type: string;
 }
+
+export type PilganType = 'A' | 'B' | 'C' | 'D' | 'E';
+
+export interface PilganLabelInterface {
+  A: string;
+  B: string;
+  C: string;
+  D: string;
+  E: string;
+}

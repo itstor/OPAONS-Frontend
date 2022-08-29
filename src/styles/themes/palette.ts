@@ -23,6 +23,7 @@ interface DefaultPaletteOptions extends PaletteOptions {
 
 export default function themePalette(theme: IThemeOption): DefaultPaletteOptions {
   return {
+    mode: 'light',
     common: {
       black: theme.colors?.darkPaper,
     },

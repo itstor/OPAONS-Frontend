@@ -17,8 +17,20 @@ class SoalService {
     return apiPrivate.get<PagingInterface<SoalInterface & DefaultResponseInterface>>('soal' + queryPick(options));
   }
 
+  async getSoalById({ id }: { id: string }) {
+    return apiPrivate.get<SoalInterface & DefaultResponseInterface>(`soal/${id}`).then((r) => r.data);
+  }
+
   deleteSoalById(id: string) {
     return apiPrivate.delete(`soal/${id}`);
+  }
+
+  createSoal(data: SoalInterface) {
+    return apiPrivate.post('soal', data);
+  }
+
+  updateSoalById(id: string, data: Partial<SoalInterface>) {
+    return apiPrivate.patch(`soal/${id}`, data);
   }
 }
 
