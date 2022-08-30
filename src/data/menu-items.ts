@@ -161,13 +161,13 @@ const items: Array<MenuItem> = [
         children: [
           {
             id: 'ranking2sma',
-            title: 'Kategori SMA',
+            title: 'Ranking SMA',
             type: 'item',
             url: '/ranking/sma?babak=2',
           },
           {
             id: 'ranking2smk',
-            title: 'Kategori SMK',
+            title: 'Ranking SMK',
             type: 'item',
             url: '/ranking/smk?babak=2',
           },
