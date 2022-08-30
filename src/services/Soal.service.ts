@@ -1,7 +1,8 @@
 import { apiPrivate } from '@/services/apiPrivate';
-import { PagingInterface } from '@/ts/interfaces/Pagination.interface';
+import { OldPagingInterface } from '@/ts/interfaces/Pagination.interface';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
 import { SoalInterface } from '@/ts/interfaces/Soal.interface';
+import { AnswerInterface } from '@/ts/interfaces/User.interface';
 import queryPick from '@/ts/utils/queryPick';
 
 class SoalService {
@@ -14,7 +15,15 @@ class SoalService {
     limit?: number;
     sortBy?: string;
   }) {
-    return apiPrivate.get<PagingInterface<SoalInterface & DefaultResponseInterface>>('soal' + queryPick(options));
+    return apiPrivate.get<OldPagingInterface<SoalInterface & DefaultResponseInterface>>('soal' + queryPick(options));
+  }
+
+  getSoalPeserta() {
+    return apiPrivate.get<(SoalInterface & DefaultResponseInterface)[]>('soal/peserta');
+  }
+
+  getUserAnswers() {
+    return apiPrivate.get<AnswerInterface[]>('soal/answers');
   }
 
   async getSoalById({ id }: { id: string }) {

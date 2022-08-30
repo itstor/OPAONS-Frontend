@@ -1,6 +1,6 @@
 import { apiPrivate } from '@/services/apiPrivate';
 import UserService from '@/services/User.service';
-import { PagingInterface } from '@/ts/interfaces/Pagination.interface';
+import { NewPagingInterface } from '@/ts/interfaces/Pagination.interface';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
 import { NewTeamFormInterface, TeamInterface } from '@/ts/interfaces/Team.interface';
 import { UserInterface } from '@/ts/interfaces/User.interface';
@@ -8,7 +8,7 @@ import queryPick from '@/ts/utils/queryPick';
 
 class TeamService {
   getAllTeams(options: { sortBy?: string; limit?: number; page?: number; schoolType?: string }) {
-    return apiPrivate.get<PagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick(options));
+    return apiPrivate.get<NewPagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick(options));
   }
 
   createTeam(team: NewTeamFormInterface) {
@@ -41,14 +41,16 @@ class TeamService {
 
   async getMinimumScore() {
     return await apiPrivate
-      .get<PagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick({ limit: 1, sortBy: 'score:desc', page: 1 }))
-      .then((r) => r.data.results[0].score);
+      .get<NewPagingInterface<TeamInterface & DefaultResponseInterface>>(
+        'team/all' + queryPick({ limit: 1, sortBy: 'score:desc', page: 1 })
+      )
+      .then((r) => r.data.docs[0].score);
   }
 
   async getMaximumScore() {
     return await apiPrivate
-      .get<PagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick({ limit: 1, sortBy: 'score:asc', page: 1 }))
-      .then((r) => r.data.results[0].score);
+      .get<NewPagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick({ limit: 1, sortBy: 'score:asc', page: 1 }))
+      .then((r) => r.data.docs[0].score);
   }
 }
 

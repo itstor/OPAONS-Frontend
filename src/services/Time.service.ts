@@ -1,12 +1,14 @@
 import { apiPrivate } from '@/services/apiPrivate';
-import { PagingInterface } from '@/ts/interfaces/Pagination.interface';
+import { OldPagingInterface } from '@/ts/interfaces/Pagination.interface';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
 import { TimeInterface } from '@/ts/interfaces/Time.interface';
 import queryPick from '@/ts/utils/queryPick';
 
 class TimeService {
   async getAllTimes(options: { round?: number; sortBy?: string; limit?: number; page?: number }) {
-    return await apiPrivate.get<PagingInterface<TimeInterface & DefaultResponseInterface>>('time' + queryPick(options)).then((r) => r.data);
+    return await apiPrivate
+      .get<OldPagingInterface<TimeInterface & DefaultResponseInterface>>('time' + queryPick(options))
+      .then((r) => r.data);
   }
 
   createTime(time: TimeInterface) {

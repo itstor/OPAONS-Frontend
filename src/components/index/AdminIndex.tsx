@@ -13,13 +13,19 @@ import SubCard from '@/components/SubCard';
 
 import TimeService from '@/services/Time.service';
 import { ApiError } from '@/ts/interfaces/ApiError.interface';
-import { PagingInterface } from '@/ts/interfaces/Pagination.interface';
+import { OldPagingInterface } from '@/ts/interfaces/Pagination.interface';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
 import { TimeInterface } from '@/ts/interfaces/Time.interface';
 
 export default function AdminIndex() {
-  const roundOneData = useSWR<PagingInterface<TimeInterface & DefaultResponseInterface>, ApiError>({ round: 1 }, TimeService.getAllTimes);
-  const roundTwoData = useSWR<PagingInterface<TimeInterface & DefaultResponseInterface>, ApiError>({ round: 2 }, TimeService.getAllTimes);
+  const roundOneData = useSWR<OldPagingInterface<TimeInterface & DefaultResponseInterface>, ApiError>(
+    { round: 1 },
+    TimeService.getAllTimes
+  );
+  const roundTwoData = useSWR<OldPagingInterface<TimeInterface & DefaultResponseInterface>, ApiError>(
+    { round: 2 },
+    TimeService.getAllTimes
+  );
 
   const [roundOneStart, setRoundOneStart] = useState<Date | null>(null);
   const [roundOneEnd, setRoundOneEnd] = useState<Date | null>(null);

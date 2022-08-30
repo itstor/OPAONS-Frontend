@@ -1,3 +1,5 @@
+import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
+
 export enum Difficulty {
   MUDAH = 'Mudah',
   SEDANG = 'Sedang',
@@ -29,6 +31,18 @@ export interface SoalInterface {
   answer: string;
   round: number;
   type: string;
+}
+
+export interface ExamInterface {
+  answer: string | null;
+  visited: boolean;
+  marked: boolean;
+  question: SoalInterface & DefaultResponseInterface;
+}
+
+export interface LocalUserAnswerInterface {
+  questionId: string;
+  answer: string | null;
 }
 
 export type PilganType = 'A' | 'B' | 'C' | 'D' | 'E';
