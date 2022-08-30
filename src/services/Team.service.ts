@@ -39,18 +39,20 @@ class TeamService {
       });
   }
 
-  async getMinimumScore() {
+  async getMinimumScore({ babak, kategori }: { babak: 1 | 2; kategori: string }) {
     return await apiPrivate
       .get<NewPagingInterface<TeamInterface & DefaultResponseInterface>>(
-        'team/all' + queryPick({ limit: 1, sortBy: 'score:desc', page: 1 })
+        'team/all' + queryPick({ limit: 1, sortBy: `scoreTotal_${babak}:asc`, page: 1, schoolType: kategori })
       )
-      .then((r) => r.data.docs[0].score);
+      .then((r) => r.data.docs[0][`scoreTotal_${babak}`]);
   }
 
-  async getMaximumScore() {
+  async getMaximumScore({ babak, kategori }: { babak: 1 | 2; kategori: string }) {
     return await apiPrivate
-      .get<NewPagingInterface<TeamInterface & DefaultResponseInterface>>('team/all' + queryPick({ limit: 1, sortBy: 'score:asc', page: 1 }))
-      .then((r) => r.data.docs[0].score);
+      .get<NewPagingInterface<TeamInterface & DefaultResponseInterface>>(
+        'team/all' + queryPick({ limit: 1, sortBy: `scoreTotal_${babak}:desc`, page: 1, schoolType: kategori })
+      )
+      .then((r) => r.data.docs[0][`scoreTotal_${babak}`]);
   }
 }
 

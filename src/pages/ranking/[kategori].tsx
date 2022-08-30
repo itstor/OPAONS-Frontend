@@ -14,8 +14,9 @@ import NotFoundPage from '@/pages/404';
 import TeamService from '@/services/Team.service';
 
 const RankingPage = ({ babak, kategori }: { babak: number; kategori: string }) => {
-  const minimumScore = useSWR(TeamService.getMinimumScore);
-  const maximumScore = useSWR(TeamService.getMaximumScore);
+  kategori = kategori.toUpperCase();
+  const minimumScore = useSWR({ babak, kategori, key: 'min' }, TeamService.getMinimumScore);
+  const maximumScore = useSWR({ babak, kategori, key: 'max' }, TeamService.getMaximumScore);
 
   return (
     <>
@@ -24,10 +25,10 @@ const RankingPage = ({ babak, kategori }: { babak: number; kategori: string }) =
         <Grid container direction='column' gap={2}>
           <Grid container direction='row' spacing={2}>
             <Grid item xs={12} md={6}>
-              <RankingCard isLoading={typeof maximumScore.data !== 'undefined'} type='max' value={maximumScore.data ?? 0} />
+              <RankingCard isLoading={typeof maximumScore.data === 'undefined'} type='max' value={maximumScore.data ?? 0} />
             </Grid>
             <Grid item xs={12} md={6}>
-              <RankingCard isLoading={typeof maximumScore.data !== 'undefined'} type='min' value={minimumScore.data ?? 0} />
+              <RankingCard isLoading={typeof minimumScore.data === 'undefined'} type='min' value={minimumScore.data ?? 0} />
             </Grid>
             {/* <Grid item xs={6} md={4}>
               <RankingCard isLoading={false} type='mean' value={101.4} />
