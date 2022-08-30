@@ -41,9 +41,30 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
         options: {
           filter: false,
           sort: false,
-          setCellProps: () => ({
-            style: { minWidth: '600px', maxWidth: '600px' },
-          }),
+        },
+      },
+      {
+        name: 'school',
+        label: 'Asal Sekolah',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'email',
+        label: 'Email',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'phone',
+        label: 'No. Telp',
+        options: {
+          filter: false,
+          sort: false,
         },
       },
       {
