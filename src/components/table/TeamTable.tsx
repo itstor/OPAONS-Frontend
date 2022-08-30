@@ -79,7 +79,7 @@ class TeamTable extends Component {
         },
       },
       {
-        name: 'id',
+        name: '_id',
         label: 'Action',
         options: {
           filter: false,
