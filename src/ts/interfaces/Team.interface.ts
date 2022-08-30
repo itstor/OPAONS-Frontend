@@ -1,3 +1,6 @@
+import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
+import { UserInterface } from '@/ts/interfaces/User.interface';
+
 export interface TeamInterface {
   membersId: string[];
   name: string;
@@ -6,6 +9,11 @@ export interface TeamInterface {
   email: string;
   score: number;
   schoolType: string;
+  members: (UserInterface & DefaultResponseInterface)[];
+  scoreTotal_1: number;
+  scoreTotal_2: number;
+  corrected: number;
+  scoreTotal: number;
 }
 
 export interface TeamMemberFormInterface {

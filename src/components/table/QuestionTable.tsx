@@ -15,7 +15,7 @@ import TipeSoalChip from '@/components/KategoriSoalChip';
 import SoalCard from '@/components/SoalCard';
 
 import SoalService from '@/services/Soal.service';
-import { PagingInterface } from '@/ts/interfaces/Pagination.interface';
+import { OldPagingInterface } from '@/ts/interfaces/Pagination.interface';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
 import { Difficulty, PilganType, SoalInterface, TipeSoal } from '@/ts/interfaces/Soal.interface';
 import { TableSortOrder, TableState } from '@/ts/interfaces/Table.interface';
@@ -180,7 +180,7 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
       school: this.props.kategori.toUpperCase(),
       round: this.props.babak,
     })
-      .then((res: AxiosResponse<PagingInterface<SoalInterface & DefaultResponseInterface>>) => {
+      .then((res: AxiosResponse<OldPagingInterface<SoalInterface & DefaultResponseInterface>>) => {
         this.setState({
           data: res.data.results,
           isLoading: false,

@@ -165,9 +165,9 @@ class TeamTable extends Component {
     })
       .then((res) => {
         this.setState({
-          data: res.data.results,
+          data: res.data.docs,
           isLoading: false,
-          count: res.data.totalResults,
+          count: res.data.totalDocs,
           page: page,
           rowsPerPage: limit,
           sortOrder: sortOrder || this.state.sortOrder,

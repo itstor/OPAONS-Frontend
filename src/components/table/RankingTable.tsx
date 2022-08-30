@@ -19,17 +19,17 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
     count: 0,
     data: [],
     sortOrder: {
-      name: 'score',
+      name: 'scoreTotal_' + this.props.babak,
       direction: 'desc',
     },
     filter: [],
     columns: [
       {
-        name: 'score',
+        name: 'scoreTotal_' + this.props.babak,
         label: 'Ranking',
         options: {
           filter: false,
-          sort: false,
+          sort: true,
           customBodyRender(value, tableMeta) {
             return tableMeta.tableState.rowsPerPage * tableMeta.tableState.page + tableMeta.rowIndex + 1;
           },
@@ -47,7 +47,7 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
         },
       },
       {
-        name: 'score',
+        name: 'scoreTotal_' + this.props.babak,
         label: 'Skor',
         options: {
           filter: true,
@@ -65,8 +65,16 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
     this.getData({ page: 0, limit: this.state.rowsPerPage, sortOrder: this.state.sortOrder });
   }
 
-  componentDidUpdate(prevProps: Readonly<{ babak: number; kategori: string }>) {
+  async componentDidUpdate(prevProps: Readonly<{ babak: number; kategori: string }>) {
     if (prevProps.babak !== this.props.babak || prevProps.kategori !== this.props.kategori) {
+      const sortBy = {
+        name: 'scoreTotal_' + this.props.babak,
+        direction: 'desc' as 'desc' | 'asc',
+      };
+      const column = this.state.columns;
+      column[0].name = 'scoreTotal_' + this.props.babak;
+      column[2].name = 'scoreTotal_' + this.props.babak;
+      await this.setState({ sortOrder: sortBy, columns: column });
       this.getData({});
     }
   }
@@ -121,9 +129,9 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
     })
       .then((res) => {
         this.setState({
-          data: res.data.results,
+          data: res.data.docs,
           isLoading: false,
-          count: res.data.totalResults,
+          count: res.data.totalDocs,
           page: page,
           rowsPerPage: limit,
           sortOrder: sortOrder || this.state.sortOrder,
@@ -179,7 +187,7 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
       renderExpandableRow(rowData, rowMeta) {
         if (self.state.data) {
           const teamMember = self.state.data[rowMeta.dataIndex].membersId;
-          return <UserRankingTable ids={teamMember} />;
+          return <UserRankingTable ids={teamMember} babak={self.props.babak as 1 | 2} />;
         }
 
         return <div>Loading...</div>;

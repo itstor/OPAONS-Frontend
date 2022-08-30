@@ -9,7 +9,7 @@ export type TableState<T> = {
   filter?: string[][];
   sortOrder?: TableSortOrder;
   data?: Array<T>;
-  columns?: Array<MUIDataTableColumn>;
+  columns: Array<MUIDataTableColumn>;
   isLoading?: boolean;
 };
 
