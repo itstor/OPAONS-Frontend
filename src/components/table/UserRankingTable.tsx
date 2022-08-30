@@ -16,7 +16,7 @@ export default function UserRankingTable({ ids, babak }: { ids: string[]; babak:
   return (
     <React.Fragment>
       <tr>
-        <td colSpan={4}>
+        <td colSpan={7}>
           <TableContainer component={Paper}>
             <Table style={{ minWidth: '650' }} aria-label='simple table'>
               <TableHead>

@@ -94,7 +94,7 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
       };
       const column = this.state.columns;
       column[0].name = 'scoreTotal_' + this.props.babak;
-      column[2].name = 'scoreTotal_' + this.props.babak;
+      column[5].name = 'scoreTotal_' + this.props.babak;
       await this.setState({ sortOrder: sortBy, columns: column });
       this.getData({});
     }
