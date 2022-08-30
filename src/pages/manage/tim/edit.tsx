@@ -2,20 +2,19 @@
 import { Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useFormik } from 'formik';
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import * as yup from 'yup';
 
-import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import DataAnggotaForm from '@/components/manage/peserta/DataAnggotaForm';
 import Seo from '@/components/Seo';
 import SubCard from '@/components/SubCard';
 
+import { useAuth } from '@/context/AuthProvider';
 import TeamService from '@/services/Team.service';
 import UserService from '@/services/User.service';
 import { ApiError } from '@/ts/interfaces/ApiError.interface';
@@ -26,12 +25,20 @@ import { UserInterface } from '@/ts/interfaces/User.interface';
 export default function EditPesertaPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { isAuthenticated } = useAuth();
 
   const dataTim = useSWR<{ team: (TeamInterface & DefaultResponseInterface)[] }, ApiError>({ id: id }, TeamService.getTeamById);
   const dataAnggota = useSWR<(UserInterface & DefaultResponseInterface)[], ApiError>(
     dataTim.data ? { ids: dataTim.data?.team[0].membersId } : null,
     TeamService.getAllTeamMembers
   );
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/auth/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!id) {
@@ -273,29 +280,29 @@ export default function EditPesertaPage() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { isAuthenticated, role } = getSession(context);
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { isAuthenticated, role } = getSession(context);
 
-  if (!isAuthenticated) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    };
-  }
+//   if (!isAuthenticated) {
+//     return {
+//       redirect: {
+//         destination: '/auth/login',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  if (role !== 'admin') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+//   if (role !== 'admin') {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return { props: { isAuthenticated, role } };
-};
+//   return { props: { isAuthenticated, role } };
+// };
 
 EditPesertaPage.getLayout = function getLayout(page: ReactElement): JSX.Element {
   return (
