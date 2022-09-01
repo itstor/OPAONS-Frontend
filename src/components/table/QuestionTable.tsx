@@ -243,7 +243,7 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
               size='small'
               style={{ padding: 12 }}
               className='hover:text-primary-700'
-              onClick={() => Router.push(`/soal/tambah?babak=${self.props.babak}&kategori=${self.props.kategori}`)}
+              onClick={() => Router.push(`/dashboard/soal/tambah?babak=${self.props.babak}&kategori=${self.props.kategori}`)}
             >
               <FontAwesomeIcon icon={faPlus} fontSize='1rem' />
             </IconButton>
