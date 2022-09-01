@@ -5,21 +5,25 @@ import RadioGroup from '@mui/material/RadioGroup';
 import { styled } from '@mui/material/styles';
 import { ColorPartial } from '@mui/material/styles/createPalette';
 import parse from 'html-react-parser';
+import { toNumber } from 'lodash';
 import { useState } from 'react';
 
 import { PilganType } from '@/ts/interfaces/Soal.interface';
 
-const PilganIcon = styled('span', { shouldForwardProp: (props) => props !== 'content' })<{ content?: string }>(({ theme, content }) => ({
+const PilganIcon = styled('span', { shouldForwardProp: (props) => props !== 'content' && props !== 'red' })<{
+  content?: string;
+  red?: boolean;
+}>(({ theme, content, red }) => ({
   width: 28,
   height: 28,
   borderRadius: '20%',
-  backgroundColor: theme.palette.secondary.light,
+  backgroundColor: red ? theme.palette.error.main : theme.palette.secondary.light,
   textAlign: 'center',
   lineHeight: '28px',
   '&:before': {
     content: `"${content}"`,
   },
-  color: theme.palette.primary.main,
+  color: red ? theme.palette.common.white : theme.palette.primary.main,
   fontWeight: 'bolder',
   '.Mui-focusVisible &': {
     outline: '2px auto rgba(19,124,189,.6)',
@@ -43,7 +47,7 @@ const PilganSelectedIcon = styled(PilganIcon)({
   },
 });
 
-function PilganRadio({ label, row, ...props }: { label: string; row?: boolean } & RadioProps) {
+function PilganRadio({ label, row, red, ...props }: { label: string; row?: boolean; red?: boolean } & RadioProps) {
   return (
     <Radio
       sx={{
@@ -56,7 +60,7 @@ function PilganRadio({ label, row, ...props }: { label: string; row?: boolean } 
       disableRipple
       color='secondary'
       checkedIcon={<PilganSelectedIcon content={label} />}
-      icon={<PilganIcon content={label} />}
+      icon={<PilganIcon content={label} red={red} />}
       {...props}
     />
   );
@@ -82,6 +86,9 @@ export default function Pilgan({
   multipleChoice,
   handleOnChange,
   disabled,
+  fontSizeMultiplier = 0,
+  display = false,
+  correctAnswer,
 }: {
   direction?: 'row' | 'column';
   answer?: PilganType;
@@ -89,8 +96,12 @@ export default function Pilgan({
   multipleChoice: string[] | number;
   disabled?: boolean;
   handleOnChange?: (answer: PilganType) => void; //Todo remove optional
+  fontSizeMultiplier?: number;
+  display?: boolean;
+  correctAnswer?: string;
 }) {
-  const [selected, setSelected] = useState(answer);
+  const [selected, setSelected] = useState(correctAnswer || answer);
+  const review = correctAnswer !== undefined;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSelected(event.target.value as PilganType);
@@ -99,13 +110,30 @@ export default function Pilgan({
     }
   };
 
+  const fontMultiplier = (size: string) => toNumber(size.split('rem')[0]) * fontSizeMultiplier + 'rem';
+
   const renderPilgan = (typeof multipleChoice === 'number' ? [...Array(multipleChoice as number)] : multipleChoice).map((p, i) => (
     <FormControlLabel
       key={i}
       value={String.fromCharCode('A'.charCodeAt(0) + i)}
       disabled={disabled}
-      control={<PilganRadio label={String.fromCharCode('A'.charCodeAt(0) + i)} row={direction === 'row'} />}
-      label={<AnswerWrapper>{parse(typeof p !== 'string' ? '' : p)}</AnswerWrapper>}
+      control={
+        <PilganRadio
+          label={String.fromCharCode('A'.charCodeAt(0) + i)}
+          row={direction === 'row'}
+          red={review && String.fromCharCode('A'.charCodeAt(0) + i) === answer}
+        />
+      }
+      label={
+        <AnswerWrapper
+          style={{
+            fontSize: fontMultiplier(display ? '0.875rem' : '1rem'),
+            lineHeight: fontMultiplier(display ? '1.25rem' : '1.5rem'),
+          }}
+        >
+          {parse(typeof p !== 'string' ? '' : p)}
+        </AnswerWrapper>
+      }
       disableTypography
     />
   ));

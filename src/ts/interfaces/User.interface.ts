@@ -10,6 +10,7 @@ export interface UserInterface {
   answers: AnswerInterface[];
   role: string;
   corrected: boolean;
+  finished: boolean;
   school: string;
   team: string;
   score_1: number;

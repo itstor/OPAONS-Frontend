@@ -27,6 +27,10 @@ class TeamService {
     return await apiPrivate.get<{ team: (TeamInterface & DefaultResponseInterface)[] }>(`team/${id}`).then((r) => r.data);
   }
 
+  async getTeamByName({ name }: { name: string }) {
+    return await apiPrivate.get<{ team: (TeamInterface & DefaultResponseInterface)[] }>(`team?name=${name}`).then((r) => r.data);
+  }
+
   async getAllTeamMembers({ ids }: { ids: string[] }) {
     let data: (UserInterface & DefaultResponseInterface)[] = [];
     return await Promise.all(ids.map((id) => UserService.getUserById(id)))

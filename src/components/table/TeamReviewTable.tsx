@@ -1,108 +1,102 @@
-import { faEdit } from '@fortawesome/free-regular-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, IconButton, TableCell, Tooltip, Typography } from '@mui/material';
-import { AxiosResponse } from 'axios';
-import moment from 'moment';
+import { CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
+import { toNumber } from 'lodash';
 import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables';
 import Router from 'next/router';
 import { Component, ForwardedRef, forwardRef } from 'react';
 import toast from 'react-hot-toast';
-import striptags from 'striptags';
 
-import DifficultyChip from '@/components/DifficultyChip';
-import TipeSoalChip from '@/components/KategoriSoalChip';
-import SoalCard from '@/components/SoalCard';
+import FlatChip from '@/components/FlatChip';
+import UserReviewTable from '@/components/table/UserReviewTable';
 
 import SoalService from '@/services/Soal.service';
-import { OldPagingInterface } from '@/ts/interfaces/Pagination.interface';
+import TeamService from '@/services/Team.service';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
-import { Difficulty, PilganType, SoalInterface, TipeSoal } from '@/ts/interfaces/Soal.interface';
 import { TableSortOrder, TableState } from '@/ts/interfaces/Table.interface';
+import { TeamInterface } from '@/ts/interfaces/Team.interface';
 
-class QuestionTable extends Component<{ babak: number; kategori: string }, TableState<SoalInterface & DefaultResponseInterface>> {
-  state: TableState<SoalInterface & DefaultResponseInterface> = {
+class TeamReviewTable extends Component<{ babak: string; kategori: string }, TableState<TeamInterface & DefaultResponseInterface>> {
+  state: TableState<TeamInterface & DefaultResponseInterface> = {
     page: 1,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
     isLoading: false,
     count: 0,
     data: [],
     sortOrder: {
-      name: 'createdAt',
+      name: 'corrected',
       direction: 'desc',
     },
     filter: [],
     columns: [
       {
-        name: 'createdAt',
-        label: 'Created',
-        options: {
-          filter: false,
-          customBodyRender(value) {
-            return moment(value).format('DD/MM/YYYY HH:mm');
-          },
-        },
-      },
-      {
-        name: 'question',
-        label: 'Pertanyaan',
-        options: {
-          filter: false,
-          setCellProps: () => ({
-            style: {
-              minWidth: '600px',
-              maxWidth: '600px',
-            },
-          }),
-          customBodyRender(value) {
-            return <div className='max-h-4 overflow-hidden text-ellipsis'>{striptags(value)}</div>;
-          },
-        },
-      },
-      {
-        name: 'type',
-        label: 'Tipe Soal',
-        options: {
-          filter: true,
-          filterOptions: {
-            names: Object.keys(TipeSoal),
-          },
-          customBodyRender(value) {
-            return <TipeSoalChip type={value} />;
-          },
-        },
-      },
-      {
-        name: 'difficulty',
-        label: 'Kesulitan',
-        options: {
-          filter: true,
-          filterOptions: {
-            names: Object.keys(Difficulty),
-          },
-          customBodyRender(value) {
-            return <DifficultyChip difficulty={value} />;
-          },
-        },
-      },
-      {
-        name: 'id',
-        label: 'Action',
+        name: 'name',
+        label: 'Nama Tim',
         options: {
           filter: false,
           sort: false,
+        },
+      },
+      {
+        name: 'school',
+        label: 'Asal Sekolah',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'email',
+        label: 'Email',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'corrected',
+        label: 'Terkoreksi?',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value) => {
+            if (this.props.babak === '1') {
+              return <FlatChip color='success' label='Sudah' />;
+            }
 
-          customBodyRender(value) {
+            if (value >= 3) {
+              return <FlatChip color='success' label='Sudah' />;
+            } else {
+              return <FlatChip color='error' label='Belum' />;
+            }
+          },
+        },
+      },
+      {
+        name: 'scoreTotal_' + this.props.babak,
+        label: 'Skor',
+        options: {
+          filter: true,
+          sort: false,
+        },
+      },
+      {
+        name: 'name',
+        label: 'Action',
+        options: {
+          filter: true,
+          sort: false,
+          customBodyRender: (value) => {
             return (
               <div className='flex flex-row gap-2'>
-                <Tooltip title='Edit'>
+                <Tooltip title='Koreksi'>
                   <IconButton
                     size='small'
                     onClick={() => {
-                      Router.push(`/dashboard/soal/edit?id=${value}`);
+                      Router.push(`/dashboard/review/${value}?babak=${this.props.babak}`);
                     }}
                   >
-                    <FontAwesomeIcon icon={faEdit} />
+                    <FontAwesomeIcon icon={faCircleCheck} />
                   </IconButton>
                 </Tooltip>
               </div>
@@ -121,8 +115,16 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
     this.getData({ page: 0, limit: this.state.rowsPerPage, sortOrder: this.state.sortOrder });
   }
 
-  componentDidUpdate(prevProps: Readonly<{ babak: number; kategori: string }>) {
+  async componentDidUpdate(prevProps: Readonly<{ babak: string; kategori: string }>) {
     if (prevProps.babak !== this.props.babak || prevProps.kategori !== this.props.kategori) {
+      const sortBy = {
+        name: 'scoreTotal_' + this.props.babak,
+        direction: 'desc' as 'desc' | 'asc',
+      };
+      const column = this.state.columns;
+      column[0].name = 'scoreTotal_' + this.props.babak;
+      column[5].name = 'scoreTotal_' + this.props.babak;
+      await this.setState({ sortOrder: sortBy, columns: column });
       this.getData({});
     }
   }
@@ -168,23 +170,18 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
 
     page = page || this.state.page;
     limit = limit || this.state.rowsPerPage;
-    const type = filter ? filter[2][0] : undefined;
-    const difficulty = filter ? filter[3][0] : undefined;
 
-    SoalService.getSoalAdmin({
+    TeamService.getAllTeams({
       sortBy,
       limit,
       page,
-      type,
-      difficulty,
-      school: this.props.kategori.toUpperCase(),
-      round: this.props.babak,
+      schoolType: this.props.kategori.toUpperCase(),
     })
-      .then((res: AxiosResponse<OldPagingInterface<SoalInterface & DefaultResponseInterface>>) => {
+      .then((res) => {
         this.setState({
-          data: res.data.results,
+          data: res.data.docs,
           isLoading: false,
-          count: res.data.totalResults,
+          count: res.data.totalDocs,
           page: page,
           rowsPerPage: limit,
           sortOrder: sortOrder || this.state.sortOrder,
@@ -215,6 +212,8 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
       serverSide: true,
       responsive: 'standard',
       rowsPerPageOptions: [5, 10, 25, 50, 100],
+      selectableRows: 'none',
+      filter: false,
       onTableChange(action, tableState) {
         switch (action) {
           case 'changePage':
@@ -233,55 +232,23 @@ class QuestionTable extends Component<{ babak: number; kategori: string }, Table
             break;
         }
       },
-      onRowsDelete(rowsDeleted) {
-        self.deleteMultipleData(rowsDeleted);
-      },
-      customToolbar() {
-        return (
-          <Tooltip title='Tambah Soal'>
-            <IconButton
-              size='small'
-              style={{ padding: 12 }}
-              className='hover:text-primary-700'
-              onClick={() => Router.push(`/soal/tambah?babak=${self.props.babak}&kategori=${self.props.kategori}`)}
-            >
-              <FontAwesomeIcon icon={faPlus} fontSize='1rem' />
-            </IconButton>
-          </Tooltip>
-        );
-      },
       expandableRows: true,
       expandableRowsHeader: false,
       renderExpandableRow(rowData, rowMeta) {
-        if (!self.state?.data) {
-          return <>Cannot Load Question</>;
+        if (self.state.data) {
+          const teamMember = self.state.data[rowMeta.dataIndex].membersId;
+          const teamName = self.state.data[rowMeta.dataIndex].name;
+          return <UserReviewTable ids={teamMember} teamName={teamName} babak={toNumber(self.props.babak) as 1 | 2} />;
         }
 
-        try {
-          return (
-            <TableCell colSpan={6}>
-              <SoalCard
-                question={self.state?.data[rowMeta.dataIndex].question}
-                type={self.state?.data[rowMeta.dataIndex].type as keyof typeof TipeSoal}
-                multipleChoice={self.state?.data[rowMeta.dataIndex].multipleChoice}
-                correctAnswer={self.state?.data[rowMeta.dataIndex].answer as PilganType}
-                answer={self.state?.data[rowMeta.dataIndex].answer as PilganType}
-                showCorrectAnswer={true}
-                display
-              />
-            </TableCell>
-          );
-        } catch (e) {
-          return <>Cannot load question</>;
-        }
+        return <div>Loading...</div>;
       },
     };
-
     return (
       <MUIDataTable
         title={
           <Typography variant='h5'>
-            List Soal
+            Jawaban Peserta
             {isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
           </Typography>
         }
@@ -298,4 +265,4 @@ export type TableTeamRef = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default forwardRef((props: { babak: number; kategori: string }, ref: ForwardedRef<any>) => <QuestionTable {...props} ref={ref} />);
+export default forwardRef((props: { babak: string; kategori: string }, ref: ForwardedRef<any>) => <TeamReviewTable {...props} ref={ref} />);

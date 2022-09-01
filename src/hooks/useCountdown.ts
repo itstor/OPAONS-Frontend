@@ -1,17 +1,31 @@
 import { useEffect, useState } from 'react';
 
-const useCountdown = (targetDate: number) => {
-  const countDownDate = targetDate;
+const useCountdown = ({
+  targetDate,
+  callback,
+  triggerWhen = 0,
+}: {
+  targetDate: number;
+  callback?: (time: number) => void;
+  triggerWhen?: number;
+}) => {
+  const [isCalled, setIsCalled] = useState(false);
 
-  const [countDown, setCountDown] = useState(countDownDate - new Date().getTime());
+  const [countDown, setCountDown] = useState(targetDate - new Date().getTime());
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCountDown(countDownDate - new Date().getTime());
+      setCountDown(targetDate - new Date().getTime());
     }, 1000);
-
     return () => clearInterval(interval);
-  }, [countDownDate]);
+  }, [targetDate]);
+
+  if (countDown <= triggerWhen && !isCalled) {
+    setIsCalled(true);
+    if (callback) {
+      callback(countDown);
+    }
+  }
 
   return getReturnValues(countDown);
 };

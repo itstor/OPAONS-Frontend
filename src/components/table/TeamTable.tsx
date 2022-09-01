@@ -92,7 +92,7 @@ class TeamTable extends Component {
                   <IconButton
                     size='small'
                     onClick={() => {
-                      Router.push(`/manage/tim/edit?id=${value}`);
+                      Router.push(`/dashboard/manage/tim/edit?id=${value}`);
                     }}
                   >
                     <FontAwesomeIcon icon={faEdit} />

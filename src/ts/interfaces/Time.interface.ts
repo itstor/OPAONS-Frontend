@@ -1,5 +1,5 @@
 export interface TimeInterface {
-  start?: number;
-  end?: number;
-  round?: number;
+  start: number;
+  end: number;
+  round: number;
 }

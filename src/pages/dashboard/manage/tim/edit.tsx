@@ -42,7 +42,7 @@ export default function EditPesertaPage() {
 
   useEffect(() => {
     if (!id) {
-      router.push('/manage/tim');
+      router.push('dashboard/manage/tim');
     }
   }, [id, router]);
 

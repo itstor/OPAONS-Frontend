@@ -3,10 +3,13 @@ import { Button, CircularProgress, Grid, TextField } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { ReactElement, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
+import getSession from '@/components/getSession';
+import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
 import Seo from '@/components/Seo';
 import SubCard from '@/components/SubCard';
@@ -147,3 +150,32 @@ export default function AdminIndex() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { isAuthenticated, role } = getSession(context);
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  if (role !== 'admin') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { isAuthenticated, role } };
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+AdminIndex.getLayout = function getLayout(page: ReactElement): JSX.Element {
+  return <DashboardLayout title='Dashboard'>{page}</DashboardLayout>;
+};

@@ -41,8 +41,10 @@ export interface ExamInterface {
 }
 
 export interface LocalUserAnswerInterface {
-  questionId: string;
   answer: string | null;
+  visited: boolean;
+  marked: boolean;
+  question: SoalInterface & DefaultResponseInterface;
 }
 
 export type PilganType = 'A' | 'B' | 'C' | 'D' | 'E';

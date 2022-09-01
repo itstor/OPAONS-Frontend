@@ -6,18 +6,18 @@ import * as yup from 'yup';
 import getSession from '@/components/getSession';
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout';
 import MainCard from '@/components/MainCard';
-import KoreksiCard from '@/components/review/KoreksiCard';
 import Seo from '@/components/Seo';
+import TeamReviewTable from '@/components/table/TeamReviewTable';
 
 import NotFoundPage from '@/pages/404';
 
-function ReviewPage() {
+function ReviewPage({ babak, kategori }: { babak: number; kategori: string }) {
   return (
     <>
       <Seo templateTitle='Dashboard' />
       <div className='w-full'>
         <Grid container direction='column' gap={2}>
-          <Grid container direction='row' spacing={2}>
+          {/* <Grid container direction='row' spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
               <KoreksiCard isLoading={false} type='corrected' value={120} />
             </Grid>
@@ -27,8 +27,10 @@ function ReviewPage() {
             <Grid item xs={12} sm={6} md={4}>
               <KoreksiCard isLoading={false} type='total' value={101.4} />
             </Grid>
-          </Grid>
-          <MainCard title='List Jawaban'>Jawaban Table Here</MainCard>
+          </Grid> */}
+          <MainCard contentSX={{ padding: 0 }}>
+            <TeamReviewTable kategori={kategori} babak={babak.toString()} />
+          </MainCard>
         </Grid>
       </div>
     </>

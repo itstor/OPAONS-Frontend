@@ -5,6 +5,7 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import AuthService from '@/services/Auth.service';
 import CookiesService from '@/services/Cookies.service';
+import LocalStorageService from '@/services/LocalStorage.service';
 import { UserInterface } from '@/ts/interfaces/User.interface';
 
 interface AuthContextInterface {
@@ -57,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
 
     Router.push('/auth/login');
+    LocalStorageService.removeUserAnswers();
   };
 
   return <AuthContext.Provider value={{ isAuthenticated: !!user, user, login, logout, loading }}>{children}</AuthContext.Provider>;

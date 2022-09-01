@@ -16,6 +16,10 @@ class LocalStorageService {
   removeUser() {
     localStorage.removeItem('user');
   }
+
+  removeUserAnswers() {
+    localStorage.removeItem('userAnswers');
+  }
 }
 
 export default new LocalStorageService();

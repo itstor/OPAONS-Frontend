@@ -1,6 +1,6 @@
 import { apiPrivate } from '@/services/apiPrivate';
 import { DefaultResponseInterface } from '@/ts/interfaces/Response.interface';
-import { UserInterface } from '@/ts/interfaces/User.interface';
+import { AnswerInterface, UserInterface } from '@/ts/interfaces/User.interface';
 
 class UserService {
   getProfile() {
@@ -11,6 +11,12 @@ class UserService {
   }
   updateUserById(id: string, user: Partial<UserInterface>) {
     return apiPrivate.patch<UserInterface & DefaultResponseInterface>(`users/${id}`, user);
+  }
+  getUserAnswers() {
+    return apiPrivate.get<{ answers: AnswerInterface[] }>('users/answers');
+  }
+  toggleCorected(id: string) {
+    return apiPrivate.post<UserInterface>(`users/toggle-corrected/${id}`);
   }
 }
 

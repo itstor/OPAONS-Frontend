@@ -19,7 +19,7 @@ class TimeService {
     return apiPrivate.get<TimeInterface & DefaultResponseInterface>(`time/${id}`);
   }
 
-  updateTimeById(id: string, time: TimeInterface) {
+  updateTimeById(id: string, time: Partial<TimeInterface>) {
     return apiPrivate.patch<TimeInterface & DefaultResponseInterface>(`time/${id}`, time);
   }
 

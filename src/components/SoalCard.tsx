@@ -1,5 +1,7 @@
 import { Grid, TextField, Typography } from '@mui/material';
 import htmlParse from 'html-react-parser';
+import { toNumber } from 'lodash';
+import { useEffect, useState } from 'react';
 
 import Pilgan from '@/components/Pilgan';
 import SubCard from '@/components/SubCard';
@@ -11,69 +13,105 @@ export default function SoalCard({
   question,
   title,
   multipleChoice,
-  selectedAnswer,
+  answer,
   correctAnswer,
-  // difficulty,
+  display = false,
   showCorrectAnswer = false,
   onAnswerChange,
+  fontSizeMultiplier = 1,
+  showCard = true,
 }: {
   type: keyof typeof TipeSoal;
   title?: string;
   question: string;
   multipleChoice?: string[];
-  selectedAnswer?: PilganType;
-  correctAnswer?: PilganType;
-  // difficulty?: Difficulty;
+  answer?: string | null;
+  correctAnswer?: string;
+  display?: boolean;
   showCorrectAnswer?: boolean;
+  fontSizeMultiplier?: number;
   onAnswerChange?: (answer: string | undefined | null) => void;
+  showCard?: boolean;
 }) {
   // const showDifficulty = difficulty !== undefined;
+  const [answerField, setAnswerField] = useState<string | null | undefined>(answer);
 
-  return (
-    <SubCard title={title} contentSX={{ paddingLeft: 5, paddingRight: 5 }}>
-      <Grid container direction='column' gap={1}>
-        <Grid item>
-          <div className='w-full text-sm md:w-[70%]'>{htmlParse(question)}</div>
-        </Grid>
-        <Grid item>
-          {type === 'PILGAN' && (
-            <div className='w-full max-w-full md:max-w-xl'>
-              <Pilgan
-                direction='column'
-                multipleChoice={multipleChoice ?? []}
-                handleOnChange={onAnswerChange}
-                disabled={correctAnswer !== undefined}
-                answer={selectedAnswer}
-              />
-            </div>
-          )}
-          {type !== 'PILGAN' && (
-            <Grid>
-              <Typography variant='body2' fontWeight='500'>
-                Jawaban:
-              </Typography>
+  useEffect(() => {
+    setAnswerField(answer);
+  }, [answer]);
+
+  const fontMultiplier = (size: string) => toNumber(size.split('rem')[0]) * fontSizeMultiplier + 'rem';
+
+  const QuestionBody = () => (
+    <Grid container direction='column' gap={1}>
+      <Grid item>
+        <div
+          className='w-full'
+          style={{
+            fontSize: fontMultiplier(display ? '0.875rem' : '1rem'),
+            lineHeight: fontMultiplier(display ? '1.25rem' : '1.5rem'),
+          }}
+        >
+          {htmlParse(question)}
+        </div>
+      </Grid>
+      <Grid item>
+        {type === 'PILGAN' && (
+          <div className='w-full max-w-full md:max-w-xl'>
+            <Pilgan
+              direction='column'
+              multipleChoice={multipleChoice ?? []}
+              handleOnChange={onAnswerChange}
+              disabled={correctAnswer !== undefined}
+              answer={answer as PilganType}
+              fontSizeMultiplier={fontSizeMultiplier}
+              display={display}
+              correctAnswer={correctAnswer}
+            />
+          </div>
+        )}
+        {type !== 'PILGAN' && (
+          <Grid>
+            <Typography variant='body2' fontWeight='500'>
+              Jawaban:
+            </Typography>
+            <Grid container direction='row'>
               <TextField
                 className='w-full max-w-full md:max-w-xl'
                 variant='outlined'
                 placeholder={type === 'ESAI_PANJANG' ? 'Esai Panjang' : 'Esai Singkat'}
                 disabled={correctAnswer !== undefined}
+                value={answerField}
                 onChange={(e) => {
-                  if (onAnswerChange) {
-                    onAnswerChange(e.target.value);
-                  }
+                  setAnswerField(e.target.value);
+                }}
+                onBlur={() => {
+                  onAnswerChange?.(answerField);
                 }}
                 multiline={type === 'ESAI_PANJANG'}
                 minRows={type === 'ESAI_PANJANG' ? 5 : 1}
               />
             </Grid>
-          )}
-          {showCorrectAnswer && correctAnswer && type === 'ESAI_SINGKAT' && (
-            <Typography variant='body2' fontWeight='500' color='success.main'>
-              Jawaban Benar: {correctAnswer}
-            </Typography>
-          )}
-        </Grid>
+          </Grid>
+        )}
+        {showCorrectAnswer && correctAnswer && type === 'ESAI_SINGKAT' && (
+          <Typography variant='body2' fontWeight='500' color='success.main'>
+            Jawaban Benar: {correctAnswer}
+          </Typography>
+        )}
       </Grid>
-    </SubCard>
+    </Grid>
+  );
+
+  return (
+    <>
+      {showCard ? (
+        <SubCard title={title} contentSX={{ paddingLeft: 5, paddingRight: 5 }}>
+          <QuestionBody />
+        </SubCard>
+      ) : (
+        <QuestionBody />
+      )}
+    </>
   );
 }

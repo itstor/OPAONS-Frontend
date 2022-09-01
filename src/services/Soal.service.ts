@@ -27,7 +27,15 @@ class SoalService {
   }
 
   async getSoalById({ id }: { id: string }) {
-    return apiPrivate.get<SoalInterface & DefaultResponseInterface>(`soal/${id}`).then((r) => r.data);
+    return await apiPrivate.get<SoalInterface & DefaultResponseInterface>(`soal/${id}`).then((r) => r.data);
+  }
+
+  async getSoalByRound({ round, kategori }: { round: number; kategori: string }) {
+    return apiPrivate
+      .get<OldPagingInterface<SoalInterface & DefaultResponseInterface>>(
+        `soal?round=${round}&limit=1000&school=${kategori}&sortBy=type:desc`
+      )
+      .then((r) => r.data);
   }
 
   deleteSoalById(id: string) {
@@ -40,6 +48,21 @@ class SoalService {
 
   updateSoalById(id: string, data: Partial<SoalInterface>) {
     return apiPrivate.patch(`soal/${id}`, data);
+  }
+
+  jawabSoal({ id, answer }: { id: string; answer?: string | null }) {
+    const data: { soalId: string; answer?: string | null } = {
+      soalId: id,
+      answer,
+    };
+    if (answer === '' || answer === null) {
+      delete data.answer;
+    }
+    return apiPrivate.post(`soal/peserta`, data);
+  }
+
+  submitExam() {
+    return apiPrivate.post('soal/peserta/finish');
   }
 }
 

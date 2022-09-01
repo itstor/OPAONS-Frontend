@@ -16,7 +16,7 @@ export default function KoreksiCard({
   return (
     <InfoCard
       isLoading={isLoading}
-      title={type === 'corrected' ? 'Sudah Dikoreksi' : type === 'uncorrected' ? 'Belum Dikoreksi' : 'Total'}
+      title={type === 'corrected' ? 'Sudah Dikoreksi' : type === 'uncorrected' ? 'Belum' : 'Total'}
       value={value}
       icon={type === 'total' ? <AllInbox /> : <FontAwesomeIcon icon={type === 'corrected' ? faSquareCheck : faSquare} />}
     />
