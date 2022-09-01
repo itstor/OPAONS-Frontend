@@ -35,11 +35,13 @@ export default function UserSidebar({
       <Grid container direction='column' px={2} py={3} gap={2} height='100%'>
         <Typography variant='h4'>Navigasi</Typography>
         {questionData && current && changeQuestion && (
-          <QuestionNavigation current={current} questionData={questionData} changeQuestion={changeQuestion} />
+          <>
+            <QuestionNavigation current={current} questionData={questionData} changeQuestion={changeQuestion} />
+            <Button variant='contained' color='primary' onClick={handleSubmitExam} disableElevation>
+              Selesai
+            </Button>
+          </>
         )}
-        <Button variant='contained' color='primary' onClick={handleSubmitExam} disableElevation>
-          Selesai
-        </Button>
         <Grid item>
           <NavItem item={{ type: 'item', title: 'Logout', id: 'logout', icon: faSignOut }} level={1} onClick={() => logout()} />
         </Grid>

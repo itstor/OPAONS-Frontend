@@ -104,7 +104,7 @@ export default function PeraturanPage() {
                 </MainCard>
               </Grid>
               <Grid item xs>
-                <MainCard title={showRemaining ? 'Waktu Terisisa' : 'Waktu Pelaksanaan'}>
+                <MainCard title={showRemaining ? 'Waktu Tersisa' : 'Waktu Pelaksanaan'}>
                   <Grid container direction='column' gap={2}>
                     {time === false ? (
                       <>Tidak ada kompetisi untuk saat ini</>
