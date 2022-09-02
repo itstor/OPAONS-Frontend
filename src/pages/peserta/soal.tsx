@@ -71,6 +71,12 @@ export default function SoalPage() {
         })
         .catch((err: AxiosError<ApiError>) => {
           selected.answer = prevAnswer;
+
+          if (err.response?.data.message === 'Max login reached, please logout from another device') {
+            toast.error('Akun kamu melebihi batas login');
+            return;
+          }
+
           if (err.response?.status === 403) {
             toast.error('Waktu sudah habis');
             handleSubmitExam();
@@ -133,6 +139,12 @@ export default function SoalPage() {
         })
         .catch((err: AxiosError<ApiError>) => {
           selected.answer = prevAnswer;
+
+          if (err.response?.data.message === 'Max login reached, please logout from another device') {
+            toast.error('Akun kamu melebihi batas login');
+            return;
+          }
+
           if (err.response?.status === 403) {
             toast.error('Waktu sudah habis');
             handleSubmitExam();
@@ -172,6 +184,11 @@ export default function SoalPage() {
       })
       .catch((err: AxiosError<ApiError>) => {
         selected.answer = prevAnswer;
+
+        if (err.response?.data.message === 'Max login reached, please logout from another device') {
+          toast.error('Akun kamu melebihi batas login');
+          return;
+        }
 
         if (err.response?.status === 403) {
           toast.error('Waktu sudah habis');
