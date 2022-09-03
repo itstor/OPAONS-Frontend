@@ -186,10 +186,10 @@ const KoreksiJawabanTimPage = ({ tim, babak, id }: { tim: string; babak: number;
                       className='text-white'
                       disableElevation
                       fullWidth
-                      disabled={!teamData}
+                      disabled={!teamData || babak === 1}
                       onClick={handleToggleCorrected}
                     >
-                      {teamData.data?.team[0].members[selectedIndex].corrected ? 'Batalkan Koreksi' : 'Koreksi'}
+                      {teamData.data?.team[0].members[selectedIndex].corrected || babak === 1 ? 'Batalkan Koreksi' : 'Koreksi'}
                     </Button>
                   </AnimatedButton>
                 </Grid>
