@@ -40,7 +40,7 @@ export default function SoalPage() {
     const selected = userAnswers[selectedSoal - 1];
     router.push(`/peserta/soal?soal=${selectedSoal}`, undefined, { shallow: true });
 
-    if (loading) {
+    if (loading || !router.isReady) {
       return;
     }
 
@@ -216,20 +216,24 @@ export default function SoalPage() {
         questionData={userAnswers}
         showHeaderTitle={mdUp}
         handleSubmitExam={() => setIsDialogOpen(true)}
-        countdown={
-          !mdUp ? (
-            <Countdown
-              targetDate={typeof time !== 'boolean' ? time?.end ?? 0 : moment().valueOf()}
-              callback={() => {
-                toast.error('Waktu sudah habis');
-                handleSubmitExam();
-              }}
-              showLabel={false}
-            />
-          ) : (
-            <></>
-          )
-        }
+        // countdown={
+        //   !mdUp ? (
+        //     loading || time === false ? (
+        //       <></>
+        //     ) : (
+        //       <Countdown
+        //         targetDate={typeof time !== 'boolean' ? time?.end ?? 0 : moment().valueOf()}
+        //         callback={() => {
+        //           toast.error('Waktu sudah habis');
+        //           handleSubmitExam();
+        //         }}
+        //         showLabel={false}
+        //       />
+        //     )
+        //   ) : (
+        //     <></>
+        //   )
+        // }
       >
         {loading || time === false ? (
           <></>

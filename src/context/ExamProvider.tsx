@@ -38,14 +38,12 @@ export const ExamProvider = ({ children }: { children: ReactNode }) => {
   }, [userAnswers.length]);
 
   useEffect(() => {
-    if (time !== null) {
-      setTimeLoading(false);
-    }
-  }, [time]);
-
-  useEffect(() => {
     if (time === null) {
       getTime();
+    }
+
+    if (time !== null) {
+      setTimeLoading(false);
     }
   }, [time]);
 
