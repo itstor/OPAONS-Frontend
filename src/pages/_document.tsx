@@ -2,7 +2,7 @@
 import createEmotionServer from '@emotion/server/create-instance';
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 
-import createEmotionCache from '@/utils/createEmotionCache';
+import createEmotionCache from '@/ts/utils/createEmotionCache';
 
 class MyDocument extends Document {
   render() {

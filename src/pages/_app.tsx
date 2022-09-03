@@ -19,7 +19,7 @@ import 'simplebar/dist/simplebar.min.css';
 import { AuthProvider } from '@/context/AuthProvider';
 import { UserPrefProvider } from '@/context/UserPrefProvider';
 import theme from '@/styles/themes';
-import createEmotionCache from '@/utils/createEmotionCache';
+import createEmotionCache from '@/ts/utils/createEmotionCache';
 
 moment.locale('id');
 
