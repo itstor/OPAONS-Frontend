@@ -216,24 +216,24 @@ export default function SoalPage() {
         questionData={userAnswers}
         showHeaderTitle={mdUp}
         handleSubmitExam={() => setIsDialogOpen(true)}
-        // countdown={
-        //   !mdUp ? (
-        //     loading || time === false ? (
-        //       <></>
-        //     ) : (
-        //       <Countdown
-        //         targetDate={typeof time !== 'boolean' ? time?.end ?? 0 : moment().valueOf()}
-        //         callback={() => {
-        //           toast.error('Waktu sudah habis');
-        //           handleSubmitExam();
-        //         }}
-        //         showLabel={false}
-        //       />
-        //     )
-        //   ) : (
-        //     <></>
-        //   )
-        // }
+        countdown={
+          !mdUp ? (
+            loading || time === false ? (
+              <></>
+            ) : (
+              <Countdown
+                targetDate={typeof time !== 'boolean' ? time?.end ?? 0 : moment().valueOf()}
+                callback={() => {
+                  toast.error('Waktu sudah habis');
+                  handleSubmitExam();
+                }}
+                showLabel={false}
+              />
+            )
+          ) : (
+            <></>
+          )
+        }
       >
         {loading || time === false ? (
           <></>
