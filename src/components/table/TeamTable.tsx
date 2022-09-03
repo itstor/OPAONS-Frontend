@@ -130,8 +130,8 @@ class TeamTable extends Component {
         const { index } = row;
         const { data } = this.state;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const { id } = data![index] as DefaultResponseInterface;
-        await TeamService.deleteTeamById(id);
+        const { _id } = data![index] as DefaultResponseInterface;
+        await TeamService.deleteTeamById(_id);
       })
     )
       .then(() => {
