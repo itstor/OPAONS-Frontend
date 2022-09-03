@@ -1,4 +1,5 @@
 export function generateUsername(name: string, number?: number): string {
+  name = name.trim();
   number = number || 4;
 
   return name + Math.floor(Math.random() * Math.pow(10, number));
