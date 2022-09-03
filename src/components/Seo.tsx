@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 const defaultMeta = {
   title: 'OPAUNS | Kompetisi Pendidikan Akuntansi UNS',
   siteName: 'Kompetisi Pendidikan Akuntansi UNS',
-  description: 'Lomba Akuntansi', //TODO: Change this to a better description
-  url: 'https://opauns.com', //TODO: change url
+  description: 'Kompetisi Pendidikan Akuntansi Universitas Sebelas Maret | OPA UNS | ● By HIMAPAKSI UNS',
+  url: 'https://opauns.com',
   type: 'website',
   robots: 'follow, index',
-  image: 'https://tsnext-tw.thcl.dev/images/large-og.png', //TODO: Design Open Graph
+  image: '/images/large-og.png',
 };
 
 type SeoProps = {
@@ -39,7 +39,6 @@ export default function Seo(props: SeoProps) {
       <meta name='image' property='og:image' content={meta.image} />
       {/* Twitter */}
       <meta name='twitter:card' content='summary_large_image' />
-      <meta name='twitter:site' content='@th_clarence' />
       <meta name='twitter:title' content={meta.title} />
       <meta name='twitter:description' content={meta.description} />
       <meta name='twitter:image' content={meta.image} />
