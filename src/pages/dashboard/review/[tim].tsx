@@ -178,21 +178,23 @@ const KoreksiJawabanTimPage = ({ tim, babak, id }: { tim: string; babak: number;
                     <StatsCard title='Jawaban Salah' value={verdict[selectedIndex]?.false} />
                   </Grid>
                 </Grid>
-                <Grid item xs>
-                  <AnimatedButton>
-                    <Button
-                      variant='contained'
-                      color={teamData.data?.team[0].members[selectedIndex].corrected ? 'error' : 'success'}
-                      className='text-white'
-                      disableElevation
-                      fullWidth
-                      disabled={!teamData || babak === 1}
-                      onClick={handleToggleCorrected}
-                    >
-                      {teamData.data?.team[0].members[selectedIndex].corrected || babak === 1 ? 'Batalkan Koreksi' : 'Koreksi'}
-                    </Button>
-                  </AnimatedButton>
-                </Grid>
+                {toNumber(babak) !== 1 && (
+                  <Grid item xs>
+                    <AnimatedButton>
+                      <Button
+                        variant='contained'
+                        color={teamData.data?.team[0].members[selectedIndex].corrected ? 'error' : 'success'}
+                        className='text-white'
+                        disableElevation
+                        fullWidth
+                        disabled={!teamData || babak === 1}
+                        onClick={handleToggleCorrected}
+                      >
+                        {teamData.data?.team[0].members[selectedIndex].corrected || babak === 1 ? 'Batalkan Koreksi' : 'Koreksi'}
+                      </Button>
+                    </AnimatedButton>
+                  </Grid>
+                )}
                 <Grid item xs>
                   <Grid container direction='row' justifyContent='space-between' alignItems='center' spacing={2}>
                     <Grid item xs={6}>
