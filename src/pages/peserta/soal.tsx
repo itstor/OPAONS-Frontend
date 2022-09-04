@@ -11,11 +11,11 @@ import { useDebounce } from 'usehooks-ts';
 import AnimatedButton from '@/components/AnimatedButton';
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import Countdown from '@/components/Countdown';
+import ExamSoalCard from '@/components/ExamSoalCard';
 import ExamLayout from '@/components/layout/ExamLayout';
 import MainCard from '@/components/MainCard';
 import QuestionNavigation from '@/components/QuestionNavigation';
 import Seo from '@/components/Seo';
-import SoalCard from '@/components/SoalCard';
 
 import { ExamProvider, useExam } from '@/context/ExamProvider';
 import { useUserPref } from '@/context/UserPrefProvider';
@@ -115,7 +115,7 @@ export default function SoalPage() {
     const selected = userAnswers[selectedSoal - 1];
 
     return (
-      <SoalCard
+      <ExamSoalCard
         question={selected.question.question}
         type={selected.question.type as keyof typeof TipeSoal}
         multipleChoice={selected.question.multipleChoice}
