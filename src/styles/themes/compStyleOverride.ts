@@ -14,6 +14,14 @@ export default function componentStyleOverrides(theme: IThemeOption): Components
         },
       },
     },
+    MuiSwitch: {
+      styleOverrides: {
+        track: {
+          opacity: 0.2,
+          backgroundColor: '#000',
+        },
+      },
+    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,
