@@ -7,7 +7,7 @@ import createEmotionCache from '@/ts/utils/createEmotionCache';
 class MyDocument extends Document {
   render() {
     return (
-      <Html lang='en'>
+      <Html lang='id' translate='no'>
         <Head>
           <link rel='shortcut icon' href='/static/favicon.ico' />
           <link rel='preconnect' href='https://fonts.googleapis.com' />
