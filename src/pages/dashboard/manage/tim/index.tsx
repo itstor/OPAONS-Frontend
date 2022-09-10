@@ -144,7 +144,6 @@ export default function ManagePesertaPage() {
   return (
     <>
       <Seo templateTitle='Dashboard' />
-
       <Grid container direction='column' gap={2}>
         <MainCard title='Tambah Peserta'>
           <form onSubmit={formValidation.handleSubmit}>
@@ -255,7 +254,7 @@ export default function ManagePesertaPage() {
             </Grid>
           </form>
         </MainCard>
-        <MainCard contentSX={{ padding: 0 }}>
+        <MainCard contentSX={{ padding: 0 }} sx={{ maxWidth: '100%' }}>
           <TableTeam ref={tableRef} />
         </MainCard>
       </Grid>
