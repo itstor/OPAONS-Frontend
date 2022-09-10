@@ -28,7 +28,12 @@ class TeamService {
   }
 
   async getTeamByName({ name }: { name: string }) {
-    return await apiPrivate.get<{ team: (TeamInterface & DefaultResponseInterface)[] }>(`team?name=${name}`).then((r) => r.data);
+    return await apiPrivate
+      .get<{ team: (TeamInterface & DefaultResponseInterface)[] }>(
+        `team?name=${name}
+    `
+      )
+      .then((r) => r.data);
   }
 
   async getAllTeamMembers({ ids }: { ids: string[] }) {
@@ -57,6 +62,10 @@ class TeamService {
         'team/all' + queryPick({ limit: 1, sortBy: `scoreTotal_${babak}:desc`, page: 1, schoolType: kategori })
       )
       .then((r) => r.data.docs[0][`scoreTotal_${babak}`]);
+  }
+
+  toggleRoundPass({ id }: { id: string }) {
+    return apiPrivate.post(`team/toggle-pass/${id}`);
   }
 }
 
