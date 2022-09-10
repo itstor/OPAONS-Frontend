@@ -83,7 +83,7 @@ class TeamTable extends Component {
         label: 'Lolos?',
         options: {
           filter: false,
-          sort: false,
+          sort: true,
           customBodyRender(value, tableMeta, updateValue) {
             return (
               <Tooltip title='Toggle Lolos'>
