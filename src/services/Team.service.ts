@@ -63,10 +63,6 @@ class TeamService {
       )
       .then((r) => r.data.docs[0][`scoreTotal_${babak}`]);
   }
-
-  toggleRoundPass({ id }: { id: string }) {
-    return apiPrivate.post(`team/toggle-pass/${id}`);
-  }
 }
 
 export default new TeamService();
