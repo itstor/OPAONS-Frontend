@@ -82,12 +82,13 @@ export default function SoalCard({
                 placeholder={type === 'ESAI_PANJANG' ? 'Esai Panjang' : 'Esai Singkat'}
                 disabled={correctAnswer !== undefined}
                 value={answerField}
-                onChange={(e) => {
-                  setAnswerField(e.target.value);
-                }}
-                onBlur={() => {
-                  onAnswerChange?.(answerField);
-                }}
+                defaultValue={answerField}
+                // onChange={(e) => {
+                //   setAnswerField(e.target.value);
+                // }}
+                // onBlur={() => {
+                //   onAnswerChange?.(answerField);
+                // }}
                 multiline={type === 'ESAI_PANJANG'}
                 minRows={type === 'ESAI_PANJANG' ? 5 : 1}
               />
