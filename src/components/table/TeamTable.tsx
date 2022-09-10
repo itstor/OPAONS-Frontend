@@ -111,7 +111,7 @@ class TeamTable extends Component {
           sort: false,
           customBodyRender(value, tableMeta, updateValue) {
             return (
-              <Tooltip title='Toggle'>
+              <Tooltip title='Toggle Lolos'>
                 <Switch
                   checked={value}
                   onChange={() => {
