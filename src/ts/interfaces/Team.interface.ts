@@ -14,6 +14,7 @@ export interface TeamInterface {
   scoreTotal_2: number;
   corrected: number;
   scoreTotal: number;
+  pass: boolean;
 }
 
 export interface TeamMemberFormInterface {
