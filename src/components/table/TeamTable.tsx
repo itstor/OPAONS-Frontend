@@ -79,6 +79,34 @@ class TeamTable extends Component {
         },
       },
       {
+        name: 'pass',
+        label: 'Lolos?',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender(value, tableMeta, updateValue) {
+            return (
+              <Tooltip title='Toggle Lolos'>
+                <Switch
+                  checked={value}
+                  onChange={() => {
+                    const teamId = tableMeta.rowData[7];
+                    TeamService.updateTeamById(teamId, { pass: !value })
+                      .then(() => {
+                        updateValue(!value as unknown as string);
+                        toast.success('Berhasil mengubah status lolos');
+                      })
+                      .catch(() => {
+                        toast.error('Gagal mengubah status lolos');
+                      });
+                  }}
+                />
+              </Tooltip>
+            );
+          },
+        },
+      },
+      {
         name: '_id',
         label: 'Action',
         options: {
@@ -99,34 +127,6 @@ class TeamTable extends Component {
                   </IconButton>
                 </Tooltip>
               </div>
-            );
-          },
-        },
-      },
-      {
-        name: 'pass',
-        label: 'Lolos?',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRender(value, tableMeta, updateValue) {
-            return (
-              <Tooltip title='Toggle Lolos'>
-                <Switch
-                  checked={value}
-                  onChange={() => {
-                    const teamId = tableMeta.rowData[6];
-                    TeamService.toggleRoundPass({ id: teamId })
-                      .then(() => {
-                        updateValue(!value as unknown as string);
-                        toast.success('Berhasil mengubah status lolos');
-                      })
-                      .catch(() => {
-                        toast.error('Gagal mengubah status lolos');
-                      });
-                  }}
-                />
-              </Tooltip>
             );
           },
         },
