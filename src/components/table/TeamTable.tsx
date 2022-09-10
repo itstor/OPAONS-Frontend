@@ -1,6 +1,6 @@
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
+import { CircularProgress, IconButton, Switch, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
 import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables';
 import Router from 'next/router';
@@ -99,6 +99,34 @@ class TeamTable extends Component {
                   </IconButton>
                 </Tooltip>
               </div>
+            );
+          },
+        },
+      },
+      {
+        name: 'pass',
+        label: 'Lolos?',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender(value, tableMeta, updateValue) {
+            return (
+              <Tooltip title='Toggle'>
+                <Switch
+                  checked={value}
+                  onChange={() => {
+                    const teamId = tableMeta.rowData[6];
+                    TeamService.toggleRoundPass({ id: teamId })
+                      .then(() => {
+                        updateValue(!value as unknown as string);
+                        toast.success('Berhasil mengubah status lolos');
+                      })
+                      .catch(() => {
+                        toast.error('Gagal mengubah status lolos');
+                      });
+                  }}
+                />
+              </Tooltip>
             );
           },
         },
