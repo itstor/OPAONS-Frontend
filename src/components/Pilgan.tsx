@@ -89,6 +89,7 @@ export default function Pilgan({
   fontSizeMultiplier = 0,
   display = false,
   correctAnswer,
+  className,
 }: {
   direction?: 'row' | 'column';
   answer?: PilganType;
@@ -99,6 +100,7 @@ export default function Pilgan({
   fontSizeMultiplier?: number;
   display?: boolean;
   correctAnswer?: string;
+  className?: string;
 }) {
   const [selected, setSelected] = useState(correctAnswer || answer);
   const review = correctAnswer !== undefined;
@@ -130,6 +132,7 @@ export default function Pilgan({
             fontSize: fontMultiplier(display ? '0.875rem' : '1rem'),
             lineHeight: fontMultiplier(display ? '1.25rem' : '1.5rem'),
           }}
+          className={className}
         >
           {parse(typeof p !== 'string' ? '' : p)}
         </AnswerWrapper>

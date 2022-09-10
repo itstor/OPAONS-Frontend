@@ -32,7 +32,7 @@ export default function ExamSoalCard({
     <Grid container direction='column' gap={1}>
       <Grid item>
         <div
-          className='w-full'
+          className='w-full select-none'
           style={{
             fontSize: fontMultiplier('1rem'),
             lineHeight: fontMultiplier('1.5rem'),
@@ -50,6 +50,7 @@ export default function ExamSoalCard({
               handleOnChange={onAnswerChange}
               answer={answer as PilganType}
               fontSizeMultiplier={fontSizeMultiplier}
+              className='select-none'
             />
           </div>
         )}
