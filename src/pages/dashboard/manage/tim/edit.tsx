@@ -137,6 +137,9 @@ export default function EditPesertaPage() {
       if (formValidation.values.username3 !== dataAnggota.data![2].username) {
         teamMembersChanged[2].data.username = formValidation.values.username3;
       }
+      if (formValidation.values.password3.length > 0) {
+        teamMembersChanged[2].data.password = formValidation.values.password3;
+      }
 
       if (Object.keys(teamDataChanged).length > 0) {
         TeamService.updateTeamById(dataTim.data!.team[0]._id, teamDataChanged)
