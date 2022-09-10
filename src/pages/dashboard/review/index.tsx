@@ -1,4 +1,3 @@
-import { Grid } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { ReactElement } from 'react';
 import * as yup from 'yup';
@@ -16,8 +15,7 @@ function ReviewPage({ babak, kategori }: { babak: number; kategori: string }) {
     <>
       <Seo templateTitle='Dashboard' />
       <div className='w-full'>
-        <Grid container direction='column' gap={2}>
-          {/* <Grid container direction='row' spacing={2}>
+        {/* <Grid container direction='row' spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
               <KoreksiCard isLoading={false} type='corrected' value={120} />
             </Grid>
@@ -28,10 +26,9 @@ function ReviewPage({ babak, kategori }: { babak: number; kategori: string }) {
               <KoreksiCard isLoading={false} type='total' value={101.4} />
             </Grid>
           </Grid> */}
-          <MainCard contentSX={{ padding: 0 }}>
-            <TeamReviewTable kategori={kategori} babak={babak.toString()} />
-          </MainCard>
-        </Grid>
+        <MainCard contentSX={{ padding: 0 }}>
+          <TeamReviewTable kategori={kategori} babak={babak.toString()} />
+        </MainCard>
       </div>
     </>
   );
