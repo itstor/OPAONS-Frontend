@@ -1,4 +1,6 @@
-import { CircularProgress, Typography } from '@mui/material';
+import { faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CircularProgress, IconButton, Tooltip, Typography } from '@mui/material';
 import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables';
 import { Component, ForwardedRef, forwardRef } from 'react';
 import toast from 'react-hot-toast';
@@ -212,6 +214,15 @@ class RankingTable extends Component<{ babak: number; kategori: string }, TableS
         }
 
         return <div>Loading...</div>;
+      },
+      customToolbar() {
+        return (
+          <Tooltip title='Refresh'>
+            <IconButton size='small' style={{ padding: 12 }} className='hover:text-primary-700' onClick={() => self.getData({})}>
+              <FontAwesomeIcon icon={faRefresh} fontSize='1rem' />
+            </IconButton>
+          </Tooltip>
+        );
       },
     };
     return (
