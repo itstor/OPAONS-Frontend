@@ -73,6 +73,11 @@ export default function SoalPage() {
           selected.answer = prevAnswer;
           setUserAnswers(userAnswers);
 
+          if (err.code === 'ERR_NETWORK') {
+            toast.error('Koneksi internet bermasalah');
+            return;
+          }
+
           if (err.response?.data?.message === 'Max login reached, please logout from another device') {
             toast.error('Akun kamu melebihi batas login');
             return;
@@ -142,6 +147,11 @@ export default function SoalPage() {
           selected.answer = prevAnswer;
           setUserAnswers(userAnswers);
 
+          if (err.code === 'ERR_NETWORK') {
+            toast.error('Koneksi internet bermasalah');
+            return;
+          }
+
           if (err.response?.data?.message === 'Max login reached, please logout from another device') {
             toast.error('Akun kamu melebihi batas login');
             return;
@@ -187,6 +197,11 @@ export default function SoalPage() {
       .catch((err: AxiosError<ApiError>) => {
         selected.answer = prevAnswer;
         setUserAnswers(userAnswers);
+
+        if (err.code === 'ERR_NETWORK') {
+          toast.error('Koneksi internet bermasalah');
+          return;
+        }
 
         if (err.response?.data?.message === 'Max login reached, please logout from another device') {
           toast.error('Akun kamu melebihi batas login');
