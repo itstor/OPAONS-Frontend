@@ -77,6 +77,9 @@ const AnswerWrapper = styled('div')({
   // fontSize: '1rem',
   // lineHeight: '1.5',
   width: '100%',
+  img: {
+    maxWidth: '100%',
+  },
 });
 
 export default function Pilgan({

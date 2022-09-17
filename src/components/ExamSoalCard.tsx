@@ -1,4 +1,4 @@
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid, styled, TextField, Typography } from '@mui/material';
 import htmlParse from 'html-react-parser';
 import { toNumber } from 'lodash';
 
@@ -6,6 +6,12 @@ import Pilgan from '@/components/Pilgan';
 import SubCard from '@/components/SubCard';
 
 import { PilganType, TipeSoal } from '@/ts/interfaces/Soal.interface';
+
+const QuestionWrapper = styled('div')({
+  img: {
+    maxWidth: '100%',
+  },
+});
 
 export default function ExamSoalCard({
   type,
@@ -31,7 +37,7 @@ export default function ExamSoalCard({
   const QuestionBody = () => (
     <Grid container direction='column' gap={1}>
       <Grid item>
-        <div
+        <QuestionWrapper
           className='w-full select-none'
           style={{
             fontSize: fontMultiplier('1rem'),
@@ -39,11 +45,11 @@ export default function ExamSoalCard({
           }}
         >
           {htmlParse(question)}
-        </div>
+        </QuestionWrapper>
       </Grid>
       <Grid item>
         {type === 'PILGAN' && (
-          <div className='w-full max-w-full md:max-w-xl'>
+          <div className='w-full'>
             <Pilgan
               direction='column'
               multipleChoice={multipleChoice ?? []}
