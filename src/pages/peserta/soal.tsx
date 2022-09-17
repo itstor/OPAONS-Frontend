@@ -71,8 +71,9 @@ export default function SoalPage() {
         })
         .catch((err: AxiosError<ApiError>) => {
           selected.answer = prevAnswer;
+          setUserAnswers(userAnswers);
 
-          if (err.response?.data.message === 'Max login reached, please logout from another device') {
+          if (err.response?.data?.message === 'Max login reached, please logout from another device') {
             toast.error('Akun kamu melebihi batas login');
             return;
           }
@@ -93,9 +94,9 @@ export default function SoalPage() {
   useEffect(() => {
     if (!userAnswers.length) {
       populateUserAnswers().catch((err: AxiosError<ApiError>) => {
-        if (err.response?.data.message === 'User has finished the exam') {
+        if (err.response?.data?.message === 'User has finished the exam') {
           toast.error('Anda sudah menyelesaikan kompetisi');
-        } else if (err.response?.data.message === 'No exam at the moment') {
+        } else if (err.response?.data?.message === 'No exam at the moment') {
           toast.error('Tidak ada kompetisi saat ini');
         } else {
           toast.error('Terjadi kesalahan saat mengambil soal');
@@ -139,8 +140,9 @@ export default function SoalPage() {
         })
         .catch((err: AxiosError<ApiError>) => {
           selected.answer = prevAnswer;
+          setUserAnswers(userAnswers);
 
-          if (err.response?.data.message === 'Max login reached, please logout from another device') {
+          if (err.response?.data?.message === 'Max login reached, please logout from another device') {
             toast.error('Akun kamu melebihi batas login');
             return;
           }
@@ -184,8 +186,9 @@ export default function SoalPage() {
       })
       .catch((err: AxiosError<ApiError>) => {
         selected.answer = prevAnswer;
+        setUserAnswers(userAnswers);
 
-        if (err.response?.data.message === 'Max login reached, please logout from another device') {
+        if (err.response?.data?.message === 'Max login reached, please logout from another device') {
           toast.error('Akun kamu melebihi batas login');
           return;
         }
