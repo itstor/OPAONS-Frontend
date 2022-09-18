@@ -95,7 +95,7 @@ export default function SoalCard({
                 // onBlur={() => {
                 //   onAnswerChange?.(answerField);
                 // }}
-                multiline={type === 'ESAI_PANJANG'}
+                multiline={true}
                 minRows={type === 'ESAI_PANJANG' ? 5 : 1}
               />
             </Grid>
