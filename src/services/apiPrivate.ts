@@ -60,7 +60,7 @@ apiPrivate.interceptors.response.use(
           refreshToken: refreshToken,
         })
         .then((res) => {
-          if (res.status === 201) {
+          if (res.status === 200) {
             CookiesService.setAccessToken(res.data.access);
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + CookiesService.getAccessToken();
             return axios(originalRequest);
